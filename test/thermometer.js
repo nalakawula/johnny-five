@@ -109,6 +109,88 @@ function testAnalogChange(test) {
   test.done();
 }
 
+function testConstructDisabled(test) {
+  this.thermometer = new Thermometer({
+    controller: this.thermometer.controller,
+    pin: this.thermometer.pin,
+    freq: this.thermometer.freq,
+    board: this.board,
+    enabled: false,
+  });
+
+  var raw = this.analogRead.firstCall.yield.bind(this.analogRead.firstCall);
+  var spy = this.sandbox.spy();
+
+  test.expect(2);
+
+  this.thermometer.on("change", spy);
+
+  raw(100);
+  this.clock.tick(this.freq);
+  raw(200);
+  this.clock.tick(this.freq);
+
+  test.equal(spy.callCount, 0);
+
+  this.thermometer.enable();
+
+  raw(100);
+  this.clock.tick(this.freq);
+  raw(200);
+  this.clock.tick(this.freq);
+
+  test.equal(spy.callCount, 1);
+  test.done();
+}
+
+function testEnable(test) {
+  var raw = this.analogRead.firstCall.yield.bind(this.analogRead.firstCall);
+  var spy = this.sandbox.spy();
+
+  test.expect(2);
+
+  this.thermometer.disable();
+
+  this.thermometer.on("change", spy);
+
+  raw(100);
+  this.clock.tick(this.freq);
+  raw(200);
+  this.clock.tick(this.freq);
+
+  test.equal(spy.callCount, 0);
+
+  this.thermometer.enable();
+
+  raw(100);
+  this.clock.tick(this.freq);
+  raw(200);
+  this.clock.tick(this.freq);
+
+  test.equal(spy.callCount, 2);
+  test.done();
+}
+
+function testDisable(test) {
+  var raw = this.analogRead.firstCall.yield.bind(this.analogRead.firstCall);
+  var spy = this.sandbox.spy();
+
+  test.expect(1);
+
+  this.thermometer.disable();
+
+  this.thermometer.on("change", spy);
+
+  raw(100);
+  this.clock.tick(this.freq);
+  raw(200);
+  this.clock.tick(this.freq);
+
+  test.equal(spy.callCount, 0);
+
+  test.done();
+}
+
 function testShape(test) {
   test.expect(this.proto.length + this.instance.length);
 
@@ -219,6 +301,9 @@ exports["Thermometer -- ANALOG"] = {
 
     shape: testShape,
     change: testAnalogChange,
+    enable: testEnable,
+    disable: testDisable,
+    constructDisabled: testConstructDisabled,
 
     rawData: makeTestAnalogConversion({
       raw: 50,
@@ -289,7 +374,16 @@ exports["Thermometer -- ANALOG"] = {
       F: -371,
       K: 49,
     }),
+    maxRawValue1023: makeTestAnalogConversion({
+      raw: 763,
+      C: 100,
+      F: 212,
+      K: 373,
+    }),
     change: testAnalogChange,
+    enable: testEnable,
+    disable: testDisable,
+    constructDisabled: testConstructDisabled,
     digits: function(test) {
       test.expect(1);
       test.equal(digits.fractional(this.thermometer.C), 0);
@@ -322,7 +416,16 @@ exports["Thermometer -- ANALOG"] = {
       F: 208,
       K: 371
     }),
+    maxRawValue1023: makeTestAnalogConversion({
+      raw: 214,
+      C: 105,
+      F: 221,
+      K: 378,
+    }),
     change: testAnalogChange,
+    enable: testEnable,
+    disable: testDisable,
+    constructDisabled: testConstructDisabled,
     digits: function(test) {
       test.expect(1);
       test.equal(digits.fractional(this.thermometer.C), 0);
@@ -344,6 +447,9 @@ exports["Thermometer -- ANALOG"] = {
 
     shape: testShape,
     change: testAnalogChange,
+    enable: testEnable,
+    disable: testDisable,
+    constructDisabled: testConstructDisabled,
 
     aref: makeTestAnalogConversion({
       aref: 3.3,
@@ -359,6 +465,14 @@ exports["Thermometer -- ANALOG"] = {
       F: 73,
       K: 296
     }),
+
+    maxRawValue1023: makeTestAnalogConversion({
+      raw: 306,
+      C: 100,
+      F: 212,
+      K: 373,
+    }),
+
     digits: function(test) {
       test.expect(1);
       test.equal(digits.fractional(this.thermometer.C), 0);
@@ -396,7 +510,10 @@ exports["Thermometer -- ANALOG"] = {
       test.expect(1);
       test.equal(digits.fractional(this.thermometer.C), 0);
       test.done();
-    }
+    },
+    enable: testEnable,
+    disable: testDisable,
+    constructDisabled: testConstructDisabled,
   },
 
   TINKERKIT: {
@@ -430,7 +547,10 @@ exports["Thermometer -- ANALOG"] = {
       test.expect(1);
       test.equal(digits.fractional(this.thermometer.C), 0);
       test.done();
-    }
+    },
+    enable: testEnable,
+    disable: testDisable,
+    constructDisabled: testConstructDisabled,
   },
 };
 
@@ -761,6 +881,32 @@ exports["Thermometer -- DS18B20"] = {
     test.equals(failedToCreate, true);
 
     test.done();
+  },
+
+  twoDriversOnDifferentPins: function(test) {
+    var spy = this.sandbox.spy(Thermometer.Drivers, "get");
+    createDS18B20(1);
+    createDS18B20(2);
+    var drv1 = spy.getCall(0).returnValue;
+    var drv2 = spy.getCall(1).returnValue;
+    test.ok(drv1 !== drv2);
+    test.done();
+  },
+
+  multipleAddressedDriversOnDifferentPins: function(test) {
+    var device1 = [0x3B, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0xFF];
+    var device2 = [0x3B, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x00];
+    var device3 = [0x3B, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0xF0];
+    var spy = this.sandbox.spy(Thermometer.Drivers, "get");
+    createDS18B20(1, device1);
+    createDS18B20(2, device2);
+    createDS18B20(1, device3);
+    var drv1 = spy.getCall(0).returnValue;
+    var drv2 = spy.getCall(1).returnValue;
+    var drv3 = spy.getCall(2).returnValue;
+    test.ok(drv1 !== drv2);
+    test.ok(drv1 === drv3);
+    test.done();
   }
 };
 
@@ -1031,6 +1177,70 @@ exports["Thermometer -- SI7020"] = {
   }
 };
 
+exports["Thermometer -- SHT31D"] = {
+
+  setUp: function(done) {
+    this.i2cConfig = this.sandbox.spy(MockFirmata.prototype, "i2cConfig");
+    this.i2cReadOnce = this.sandbox.spy(MockFirmata.prototype, "i2cReadOnce");
+
+    this.thermometer = new Thermometer({
+      controller: "SHT31D",
+      board: this.board,
+      freq: 10
+    });
+
+    done();
+  },
+
+  fwdOptionsToi2cConfig: function(test) {
+    test.expect(3);
+
+    this.i2cConfig.reset();
+
+    new Thermometer({
+      controller: "SHT31D",
+      address: 0xff,
+      bus: "i2c-1",
+      board: this.board
+    });
+
+    var forwarded = this.i2cConfig.lastCall.args[0];
+
+    test.equal(this.i2cConfig.callCount, 1);
+    test.equal(forwarded.address, 0xff);
+    test.equal(forwarded.bus, "i2c-1");
+
+    test.done();
+  },
+
+  oneHundredDegreesCelsius: function(test) {
+    test.expect(5);
+    var readOnce;
+    var spy = this.sandbox.spy();
+
+    this.thermometer.on("data", spy);
+
+    this.clock.tick(20);
+
+    test.equal(this.i2cReadOnce.callCount, 1);
+    test.equal(this.i2cReadOnce.lastCall.args[0], 0x44);
+    test.equal(this.i2cReadOnce.lastCall.args[1], 6);
+
+    readOnce = this.i2cReadOnce.lastCall.args[2];
+    readOnce([
+      0xd4, 0x1d, // temperature (100 degrees celsius)
+      0, // crc
+      0, 0, // humidity
+      0 // crc
+    ]);
+    this.clock.tick(10);
+
+    test.equal(spy.callCount, 1);
+    test.equal(Math.round(this.thermometer.C), 100);
+    test.done();
+  }
+};
+
 exports["Thermometer -- HTU21D"] = {
 
   setUp: function(done) {
@@ -1150,6 +1360,38 @@ exports["Thermometer -- HTU21D"] = {
     test.equal(spy.callCount, 2);
     test.equal(Math.round(this.thermometer.C), 22);
 
+    test.done();
+  },
+
+  oneHundredDegreesCelsius: function(test) {
+    test.expect(8);
+    var readOnce;
+    var spy = this.sandbox.spy();
+
+    this.thermometer.on("data", spy);
+
+    test.equal(this.i2cReadOnce.callCount, 1);
+    test.equal(this.i2cReadOnce.lastCall.args[0], 0x40);
+    test.equal(this.i2cReadOnce.lastCall.args[1], 0xE3);
+
+    // The two numbers in the array passed to readOnce represent the two bytes
+    // of unsigned 16 bit integer which should convert to approximately 100
+    // degrees celsius.
+    // See https://github.com/rwaldron/johnny-five/issues/1278
+    readOnce = this.i2cReadOnce.lastCall.args[3];
+    readOnce([ 0xd5, 0xf0 ]);
+    this.clock.tick(10);
+
+    test.equal(this.i2cReadOnce.callCount, 2);
+    test.equal(this.i2cReadOnce.lastCall.args[0], 0x40);
+    test.equal(this.i2cReadOnce.lastCall.args[1], 0xE5);
+
+    readOnce = this.i2cReadOnce.lastCall.args[3];
+    readOnce([ 100, 76 ]);
+    this.clock.tick(10);
+
+    test.equal(spy.callCount, 1);
+    test.equal(Math.round(this.thermometer.C), 100);
     test.done();
   }
 };
@@ -1651,6 +1893,12 @@ exports["Thermometer -- MCP9808"] = {
   }
 };
 
+Object.keys(Thermometer.Controllers).forEach(function(name) {
+  exports["Thermometer - Controller, " + name] = addControllerTest(Thermometer, Thermometer.Controllers[name], {
+    controller: name
+  });
+});
+
 
 // TODO:
 // SHT31D
@@ -1658,6 +1906,8 @@ exports["Thermometer -- MCP9808"] = {
 // BMP180
 // BMP280
 // DHT11
+// DHT21
+// DHT22
 // TH02
 // MS5611
 //

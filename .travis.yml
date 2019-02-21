@@ -3,19 +3,11 @@ os:
   - osx
 language: node_js
 node_js:
-  - "0.10"
-  - "0.12"
-  - "4"
-  - "5"
-  - "6"
+  - 6
+  - 8
+  - 10
 sudo: false
 compiler: clang
-before_install:
-  - npm install -g npm@3
-  - npm install -g grunt-cli
-install: npm install
-before_script:
-  - grunt test-examples
 notifications:
   webhooks:
     urls:
@@ -26,5 +18,19 @@ notifications:
 env:
   - NO_SERIALPORT_INSTALL=1
 
+before_install:
+  - npm install -g npm@3
+  - npm install -g grunt-cli
+
+install:
+  - npm install
+
+before_script:
+  - grunt test-examples
+
+script:
+  - grunt jshint jscs nodeunit
+  - npm run test-cover
+
 after_success:
-  - npm run test-cover && npm run coveralls
+  - npm run coveralls

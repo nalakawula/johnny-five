@@ -1,3 +1,5 @@
+"use strict";
+
 global.IS_TEST_MODE = true;
 
 // Built-ins
@@ -58,6 +60,7 @@ global.Motion = five.Motion;
 global.Motor = five.Motor;
 global.Motors = five.Motors;
 global.Nodebot = five.Nodebot;
+global.Orientation = five.Orientation;
 global.Piezo = five.Piezo;
 global.Ping = five.Ping;
 global.Pin = five.Pin;
@@ -78,6 +81,12 @@ global.Thermometer = five.Thermometer;
 global.Virtual = five.Board.Virtual;
 global.Wii = five.Wii;
 
+
+// Used for alias tests
+global.Analog = five.Analog;
+global.Digital = five.Digital;
+global.Luxmeter = five.Luxmeter;
+global.Magnetometer = five.Magnetometer;
 
 
 function newBoard(pins) {
@@ -116,14 +125,49 @@ global.newBoard = newBoard;
 
 var digits = {
   all: function(x) {
-    return this.integral(Number(String(x).replace(/\./g, "")));
+    return String(x).replace(/\./g, "").length;
   },
   integral: function(x) {
-    return Math.max(Math.floor(Math.log10(Math.abs(x))), 0) + 1;
+    return String(x).split(".")[0].length;
   },
   fractional: function(x) {
-    return this.all(x) - this.integral(x);
+    let parts = String(x).split(".");
+    return parts.length < 2 ? 0 : parts[1].length;
   },
 };
 
 global.digits = digits;
+
+
+global.addControllerTest = function(Constructor, Controller, options) {
+  return {
+    setUp: function(done) {
+      this.sandbox = sinon.sandbox.create();
+      this.board = newBoard();
+      this.Controller = this.sandbox.spy(Board, "Controller");
+      this.component = new Constructor(Object.assign({}, options, {
+        board: this.board
+      }));
+      done();
+    },
+
+    tearDown: function(done) {
+      Board.purge();
+      this.sandbox.restore();
+      done();
+    },
+
+    controller: function(test) {
+      test.expect(2);
+      // Board.Controller may called more than once, for example: Servo -> Expander
+      test.equal(this.Controller.called, true);
+      // We can only test for the FIRST call to Board.Controller, since
+      // we can't generically know which componant class controllers will
+      // instantiate an Expander
+      test.equal(this.Controller.firstCall.args[0], Controller);
+      test.done();
+    },
+  };
+};
+
+global.CardinalPointsToIndex = require("./cardinal-points.json");

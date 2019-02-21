@@ -61,7 +61,9 @@ _Artwork by [Mike Sgier](http://msgierillustration.com)_
 
 [![Travis Build Status](https://travis-ci.org/rwaldron/johnny-five.svg?branch=master)](https://travis-ci.org/rwaldron/johnny-five)
 [![Appveyor Build Status](https://ci.appveyor.com/api/projects/status/hmke71k7uemtnami/branch/master?svg=true)](https://ci.appveyor.com/project/rwaldron/johnny-five)
-[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/rwaldron/johnny-five?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Coverage Status](https://coveralls.io/repos/github/rwaldron/johnny-five/badge.svg?branch=master)](https://coveralls.io/github/rwaldron/johnny-five?branch=master)
+[![Install Size](https://packagephobia.now.sh/badge?p=johnny-five)](https://packagephobia.now.sh/result?p=johnny-five)
+[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/rwaldron/johnny-five)
 
 
 
@@ -171,6 +173,8 @@ To get you up and running quickly, we provide a variety of examples for using ea
 
 To interactively navigate the examples, visit the [Johnny-Five examples](http://johnny-five.io/examples/) page on the official website. If you want to link directly to the examples in this repo, you can use one of the following links.
 
+**There are presently 363 example programs with code and diagrams!**
+
 <!--extract-start:examples-->
 
 ### Board
@@ -221,6 +225,7 @@ To interactively navigate the examples, visit the [Johnny-Five examples](http://
 - [Servo](https://github.com/rwaldron/johnny-five/blob/master/docs/servo.md)
 - [Servo - Continuous](https://github.com/rwaldron/johnny-five/blob/master/docs/servo-continuous.md)
 - [Servo - Drive](https://github.com/rwaldron/johnny-five/blob/master/docs/servo-drive.md)
+- [Servo - Multi-Turn](https://github.com/rwaldron/johnny-five/blob/master/docs/servo-multi-turn.md)
 - [Servo - PCA9685](https://github.com/rwaldron/johnny-five/blob/master/docs/servo-PCA9685.md)
 - [Servo - Prompt](https://github.com/rwaldron/johnny-five/blob/master/docs/servo-prompt.md)
 - [Servo - Slider control](https://github.com/rwaldron/johnny-five/blob/master/docs/servo-slider.md)
@@ -231,6 +236,7 @@ To interactively navigate the examples, visit the [Johnny-Five examples](http://
 ### GPS
 - [GPS - Adafruit Ultimate GPS Breakout](https://github.com/rwaldron/johnny-five/blob/master/docs/gps-adafruit.md)
 - [GPS - Default GPS](https://github.com/rwaldron/johnny-five/blob/master/docs/gps.md)
+- [GPS - Sparkfun GP-20U7](https://github.com/rwaldron/johnny-five/blob/master/docs/gps-GP-20U7.md)
 
 ### Servo Animation
 - [Servo - Animation](https://github.com/rwaldron/johnny-five/blob/master/docs/servo-animation.md)
@@ -245,6 +251,7 @@ To interactively navigate the examples, visit the [Johnny-Five examples](http://
 ### Motor
 - [Motor](https://github.com/rwaldron/johnny-five/blob/master/docs/motor.md)
 - [Motor - 3 pin](https://github.com/rwaldron/johnny-five/blob/master/docs/motor-3-pin.md)
+- [Motor - Adafruit DRV8871 DC Motor Driver Breakout](https://github.com/rwaldron/johnny-five/blob/master/docs/motor-drv8871.md)
 - [Motor - Brake](https://github.com/rwaldron/johnny-five/blob/master/docs/motor-brake.md)
 - [Motor - Current](https://github.com/rwaldron/johnny-five/blob/master/docs/motor-current.md)
 - [Motor - Directional](https://github.com/rwaldron/johnny-five/blob/master/docs/motor-directional.md)
@@ -256,6 +263,9 @@ To interactively navigate the examples, visit the [Johnny-Five examples](http://
 - [Motor - LUDUS](https://github.com/rwaldron/johnny-five/blob/master/docs/motor-LUDUS.md)
 - [Motor - PCA9685](https://github.com/rwaldron/johnny-five/blob/master/docs/motor-PCA9685.md)
 - [Motor - Sparkfun Dual H-bridge Edison Block](https://github.com/rwaldron/johnny-five/blob/master/docs/motor-sparkfun-edison-hbridge.md)
+- [Motor - Sparkfun TB6612FNG](https://github.com/rwaldron/johnny-five/blob/master/docs/motor-TB6612FNG.md)
+- [Motor - l298 Breakout](https://github.com/rwaldron/johnny-five/blob/master/docs/motor-l298-breakout.md)
+- [Motors - Dual H-Bridge](https://github.com/rwaldron/johnny-five/blob/master/docs/motor-hbridge-dual.md)
 
 ### Stepper Motor
 - [Stepper - Driver](https://github.com/rwaldron/johnny-five/blob/master/docs/stepper-driver.md)
@@ -283,6 +293,7 @@ To interactively navigate the examples, visit the [Johnny-Five examples](http://
 
 ### Keypad
 - [Keypad - 3x4 I2C Nano Backpack](https://github.com/rwaldron/johnny-five/blob/master/docs/keypad-3X4_I2C_NANO_BACKPACK.md)
+- [Keypad - 4x4 I2C Nano Backpack](https://github.com/rwaldron/johnny-five/blob/master/docs/keypad-4X4_I2C_NANO_BACKPACK.md)
 - [Keypad - VKEY](https://github.com/rwaldron/johnny-five/blob/master/docs/keypad-analog-vkey.md)
 - [Keypad - Waveshare AD](https://github.com/rwaldron/johnny-five/blob/master/docs/keypad-analog-ad.md)
 - [Touchpad - Grove QTouch](https://github.com/rwaldron/johnny-five/blob/master/docs/keypad-QTOUCH.md)
@@ -295,6 +306,7 @@ To interactively navigate the examples, visit the [Johnny-Five examples](http://
 ### Relay
 - [Relay](https://github.com/rwaldron/johnny-five/blob/master/docs/relay.md)
 - [Relay - Collection](https://github.com/rwaldron/johnny-five/blob/master/docs/relay-collection.md)
+- [Relay On Analog Pin](https://github.com/rwaldron/johnny-five/blob/master/docs/relay-on-analog-pin.md)
 
 ### Shift Register
 - [Shift Register](https://github.com/rwaldron/johnny-five/blob/master/docs/shift-register.md)
@@ -367,11 +379,14 @@ To interactively navigate the examples, visit the [Johnny-Five examples](http://
 ### IMU/Multi
 - [IMU - BNO055](https://github.com/rwaldron/johnny-five/blob/master/docs/imu-bno055.md)
 - [IMU - BNO055 (Orientation)](https://github.com/rwaldron/johnny-five/blob/master/docs/imu-bno055-orientation.md)
+- [IMU - LSM303C](https://github.com/rwaldron/johnny-five/blob/master/docs/imu-lsm303c.md)
 - [IMU - MPU6050](https://github.com/rwaldron/johnny-five/blob/master/docs/imu-mpu6050.md)
 - [Multi - BME280](https://github.com/rwaldron/johnny-five/blob/master/docs/multi-BME280.md)
 - [Multi - BMP085](https://github.com/rwaldron/johnny-five/blob/master/docs/multi-bmp085.md)
 - [Multi - BMP180](https://github.com/rwaldron/johnny-five/blob/master/docs/multi-bmp180.md)
 - [Multi - DHT11_I2C_NANO_BACKPACK](https://github.com/rwaldron/johnny-five/blob/master/docs/multi-DHT11_I2C_NANO_BACKPACK.md)
+- [Multi - DHT21_I2C_NANO_BACKPACK](https://github.com/rwaldron/johnny-five/blob/master/docs/multi-DHT21_I2C_NANO_BACKPACK.md)
+- [Multi - DHT22_I2C_NANO_BACKPACK](https://github.com/rwaldron/johnny-five/blob/master/docs/multi-DHT22_I2C_NANO_BACKPACK.md)
 - [Multi - HIH6130](https://github.com/rwaldron/johnny-five/blob/master/docs/multi-HIH6130.md)
 - [Multi - HTU21D](https://github.com/rwaldron/johnny-five/blob/master/docs/multi-htu21d.md)
 - [Multi - MPL115A2](https://github.com/rwaldron/johnny-five/blob/master/docs/multi-mpl115a2.md)
@@ -379,6 +394,7 @@ To interactively navigate the examples, visit the [Johnny-Five examples](http://
 - [Multi - MS5611](https://github.com/rwaldron/johnny-five/blob/master/docs/multi-MS5611.md)
 - [Multi - SHT31D](https://github.com/rwaldron/johnny-five/blob/master/docs/multi-sht31d.md)
 - [Multi - SI7020](https://github.com/rwaldron/johnny-five/blob/master/docs/multi-SI7020.md)
+- [Multi - SI7021](https://github.com/rwaldron/johnny-five/blob/master/docs/multi-SI7021.md)
 - [Multi - TH02](https://github.com/rwaldron/johnny-five/blob/master/docs/multi-TH02.md)
 
 ### Sensors
@@ -403,11 +419,16 @@ To interactively navigate the examples, visit the [Johnny-Five examples](http://
 - [Gyro - Analog LPR5150AL](https://github.com/rwaldron/johnny-five/blob/master/docs/gyro-lpr5150l.md)
 - [Gyro - I2C MPU6050](https://github.com/rwaldron/johnny-five/blob/master/docs/gyro-mpu6050.md)
 - [Hygrometer - DHT11_I2C_NANO_BACKPACK](https://github.com/rwaldron/johnny-five/blob/master/docs/hygrometer-DHT11_I2C_NANO_BACKPACK.md)
+- [Hygrometer - DHT21_I2C_NANO_BACKPACK](https://github.com/rwaldron/johnny-five/blob/master/docs/hygrometer-DHT21_I2C_NANO_BACKPACK.md)
+- [Hygrometer - DHT22_I2C_NANO_BACKPACK](https://github.com/rwaldron/johnny-five/blob/master/docs/hygrometer-DHT22_I2C_NANO_BACKPACK.md)
 - [Hygrometer - HIH6130](https://github.com/rwaldron/johnny-five/blob/master/docs/hygrometer-HIH6130.md)
 - [Hygrometer - HTU21D](https://github.com/rwaldron/johnny-five/blob/master/docs/hygrometer-htu21d.md)
 - [Hygrometer - SHT31D](https://github.com/rwaldron/johnny-five/blob/master/docs/hygrometer-sht31d.md)
+- [Hygrometer - SI7021](https://github.com/rwaldron/johnny-five/blob/master/docs/hygrometer-SI7021.md)
 - [Hygrometer - TH02](https://github.com/rwaldron/johnny-five/blob/master/docs/hygrometer-TH02.md)
 - [Sensor](https://github.com/rwaldron/johnny-five/blob/master/docs/sensor.md)
+- [Sensor - Digital Microwave](https://github.com/rwaldron/johnny-five/blob/master/docs/sensor-digital-microwave.md)
+- [Sensor - Flex sensor](https://github.com/rwaldron/johnny-five/blob/master/docs/flex.md)
 - [Sensor - Force sensitive resistor](https://github.com/rwaldron/johnny-five/blob/master/docs/sensor-fsr.md)
 - [Sensor - Microphone](https://github.com/rwaldron/johnny-five/blob/master/docs/microphone.md)
 - [Sensor - Photoresistor](https://github.com/rwaldron/johnny-five/blob/master/docs/photoresistor.md)
@@ -416,6 +437,8 @@ To interactively navigate the examples, visit the [Johnny-Five examples](http://
 - [Thermometer - BMP085](https://github.com/rwaldron/johnny-five/blob/master/docs/temperature-bmp085.md)
 - [Thermometer - BMP180](https://github.com/rwaldron/johnny-five/blob/master/docs/temperature-BMP180.md)
 - [Thermometer - DHT11_I2C_NANO_BACKPACK](https://github.com/rwaldron/johnny-five/blob/master/docs/temperature-DHT11_I2C_NANO_BACKPACK.md)
+- [Thermometer - DHT21_I2C_NANO_BACKPACK](https://github.com/rwaldron/johnny-five/blob/master/docs/temperature-DHT21_I2C_NANO_BACKPACK.md)
+- [Thermometer - DHT22_I2C_NANO_BACKPACK](https://github.com/rwaldron/johnny-five/blob/master/docs/temperature-DHT22_I2C_NANO_BACKPACK.md)
 - [Thermometer - DS18B20](https://github.com/rwaldron/johnny-five/blob/master/docs/temperature-ds18b20.md)
 - [Thermometer - HIH6130](https://github.com/rwaldron/johnny-five/blob/master/docs/temperature-HIH6130.md)
 - [Thermometer - HTU21D](https://github.com/rwaldron/johnny-five/blob/master/docs/temperature-htu21d.md)
@@ -429,6 +452,7 @@ To interactively navigate the examples, visit the [Johnny-Five examples](http://
 - [Thermometer - MS5611](https://github.com/rwaldron/johnny-five/blob/master/docs/temperature-MS5611.md)
 - [Thermometer - SHT31D](https://github.com/rwaldron/johnny-five/blob/master/docs/temperature-sht31d.md)
 - [Thermometer - SI7020](https://github.com/rwaldron/johnny-five/blob/master/docs/temperature-SI7020.md)
+- [Thermometer - SI7021](https://github.com/rwaldron/johnny-five/blob/master/docs/temperature-SI7021.md)
 - [Thermometer - TH02](https://github.com/rwaldron/johnny-five/blob/master/docs/temperature-TH02.md)
 - [Thermometer - TMP102](https://github.com/rwaldron/johnny-five/blob/master/docs/temperature-tmp102.md)
 - [Thermometer - TMP36](https://github.com/rwaldron/johnny-five/blob/master/docs/temperature-tmp36.md)
@@ -455,10 +479,12 @@ To interactively navigate the examples, visit the [Johnny-Five examples](http://
 - [Color - EVShield EV3 (Code)](https://github.com/rwaldron/johnny-five/blob/master/docs/color-EVS_EV3.md)
 - [Color - EVShield EV3 (Raw)](https://github.com/rwaldron/johnny-five/blob/master/docs/color-raw-EVS_EV3.md)
 - [Color - EVShield NXT (Code)](https://github.com/rwaldron/johnny-five/blob/master/docs/color-EVS_NXT.md)
+- [Light - BH1750](https://github.com/rwaldron/johnny-five/blob/master/docs/light-ambient-BH1750.md)
 - [Light - EVShield EV3 (Ambient)](https://github.com/rwaldron/johnny-five/blob/master/docs/light-ambient-EVS_EV3.md)
 - [Light - EVShield EV3 (Reflected)](https://github.com/rwaldron/johnny-five/blob/master/docs/light-reflected-EVS_EV3.md)
 - [Light - EVShield NXT (Ambient)](https://github.com/rwaldron/johnny-five/blob/master/docs/light-ambient-EVS_NXT.md)
 - [Light - EVShield NXT (Reflected)](https://github.com/rwaldron/johnny-five/blob/master/docs/light-reflected-EVS_NXT.md)
+- [Light - TSL2561](https://github.com/rwaldron/johnny-five/blob/master/docs/light-ambient-TSL2561.md)
 - [Motor - EVShield EV3](https://github.com/rwaldron/johnny-five/blob/master/docs/motor-EVS_EV3.md)
 - [Motor - EVShield NXT](https://github.com/rwaldron/johnny-five/blob/master/docs/motor-EVS_NXT.md)
 - [Proximity - EVShield EV3 (IR)](https://github.com/rwaldron/johnny-five/blob/master/docs/proximity-EVS_EV3_IR-alert.md)

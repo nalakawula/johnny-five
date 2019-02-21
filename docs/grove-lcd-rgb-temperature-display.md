@@ -96,25 +96,19 @@ function linear(start, end, step, steps) {
 
 ## Additional Notes
 For this program, you'll need:
-
 ![Intel Edison Arduino Breakout](https://cdn.sparkfun.com//assets/parts/1/0/1/3/9/13097-06.jpg)
-
 ![Grove Base Shield v2](http://www.seeedstudio.com/depot/images/product/base%20shield%20V2_01.jpg)
-
 ![Grove - LCD RGB w/ Backlight](http://www.seeedstudio.com/wiki/images/0/03/Serial_LEC_RGB_Backlight_Lcd.jpg)
-
 ![Grove - Temperature Sensor](http://www.seeedstudio.com/wiki/images/thumb/b/b0/Temperature1.jpg/400px-Temperature1.jpg)
-
-
 
 &nbsp;
 
 <!--remove-start-->
 
 ## License
-Copyright (c) 2012, 2013, 2014 Rick Waldron <waldron.rick@gmail.com>
+Copyright (c) 2012-2014 Rick Waldron <waldron.rick@gmail.com>
 Licensed under the MIT license.
-Copyright (c) 2016 The Johnny-Five Contributors
+Copyright (c) 2015-2018 The Johnny-Five Contributors
 Licensed under the MIT license.
 
 <!--remove-end-->

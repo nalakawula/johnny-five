@@ -47,6 +47,12 @@ exports["Board"] = {
     new Board();
   },
 
+  defaultResolution: function(test) {
+    test.expect(1);
+    test.deepEqual(this.board.RESOLUTION, {PWM: 255, DAC: null, ADC: 1023});
+    test.done();
+  },
+
   explicitTransport: function(test) {
     test.expect(1);
 
@@ -302,9 +308,11 @@ exports["Board"] = {
   emitExitNoRepl: function(test) {
     test.expect(2);
 
+    var clock = this.sandbox.useFakeTimers();
     var io = new MockFirmata();
 
     io.name = "Foo";
+    io.pending = 0;
 
     var board = new Board({
       io: io,
@@ -324,6 +332,50 @@ exports["Board"] = {
         test.ok(true);
       });
       process.emit("SIGINT");
+      clock.tick(1);
+    });
+
+    io.emit("connect");
+    io.emit("ready");
+  },
+
+  exitAwaitsPending: function(test) {
+    test.expect(2);
+
+    var clock = this.sandbox.useFakeTimers();
+    var io = new MockFirmata();
+
+    io.name = "Foo";
+    io.pending = 5;
+
+    var board = new Board({
+      io: io,
+      debug: false,
+      repl: false,
+      sigint: true,
+    });
+
+    var reallyExit = this.sandbox.stub(process, "reallyExit", function() {
+      reallyExit.restore();
+      test.ok(true);
+      test.done();
+    });
+
+    board.on("ready", function() {
+      this.on("exit", function() {
+        test.ok(true);
+      });
+      process.emit("SIGINT");
+      clock.tick(1);
+      io.pending--;
+      clock.tick(1);
+      io.pending--;
+      clock.tick(1);
+      io.pending--;
+      clock.tick(1);
+      io.pending--;
+      clock.tick(1);
+      io.pending--;
     });
 
     io.emit("connect");
@@ -444,7 +496,7 @@ exports["Board"] = {
   },
 
   snapshot: function(test) {
-    test.expect(68);
+    test.expect(71);
 
     new Multi({
       controller: "BME280",
@@ -580,7 +632,8 @@ exports["Board"] = {
         F: 32,
         celsius: 0,
         kelvin: 273.15,
-        aref: 5
+        aref: 5,
+        freq: 25
       }, {
         freq: 25,
         constrained: 0,
@@ -588,6 +641,7 @@ exports["Board"] = {
         value: null,
         scaled: 0,
         range: [0, 1023],
+        resolution: 1023,
         analog: 0,
         limit: null,
         threshold: 1,
@@ -605,14 +659,13 @@ exports["Board"] = {
         pin: 10
       }, {
         deadband: [90, 90],
+        degreeRange: [ 0, 180 ],
+        pwmRange: [ 600, 2400 ],
         startAt: 90,
         value: null,
         position: -1,
         type: "standard",
         history: [],
-        specs: {
-          speed: 0.17
-        },
         offset: 0,
         invert: false,
         custom: {},
@@ -1014,6 +1067,32 @@ exports["Boards"] = {
 
     test.equal(boards.debug, false);
     test.done();
+  },
+
+  onfail: function(test) {
+    test.expect(1);
+
+    var ioA = new MockFirmata();
+    var ioB = new MockFirmata();
+
+    var boards = new Boards([{
+      id: "A",
+      repl: true,
+      debug: false,
+      io: ioA
+    }, {
+      id: "B",
+      repl: false,
+      debug: false,
+      io: ioB
+    }]);
+
+    var expected = 1;
+    boards.on("fail", function(actual) {
+      test.equal(actual, expected);
+      test.done();
+    }.bind(this));
+    boards[0].emit("fail", expected);
   },
 
   portString: function(test) {

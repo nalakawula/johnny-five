@@ -59,16 +59,16 @@ board.on("ready", function() {
 
 ## Learn More
 
-- [I2C Backback Firmare](https://github.com/rwaldron/johnny-five/blob/master/firmwares/dht11_i2c_nano_backpack.ino)
+- [I2C Backback Firmare](https://github.com/rwaldron/johnny-five/blob/master/firmwares/dht_i2c_nano_backpack.ino)
 
 &nbsp;
 
 <!--remove-start-->
 
 ## License
-Copyright (c) 2012, 2013, 2014 Rick Waldron <waldron.rick@gmail.com>
+Copyright (c) 2012-2014 Rick Waldron <waldron.rick@gmail.com>
 Licensed under the MIT license.
-Copyright (c) 2016 The Johnny-Five Contributors
+Copyright (c) 2015-2018 The Johnny-Five Contributors
 Licensed under the MIT license.
 
 <!--remove-end-->

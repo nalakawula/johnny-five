@@ -45,7 +45,7 @@ var board = new five.Board({
 board.on("ready", function() {
   this.pinMode(13, this.MODES.OUTPUT);
 
-  this.loop(500, function() {
+  this.loop(500, () => {
     // Whatever the last value was, write the opposite
     this.digitalWrite(13, this.pins[13].value ? 0 : 1);
   });
@@ -65,9 +65,9 @@ board.on("ready", function() {
 <!--remove-start-->
 
 ## License
-Copyright (c) 2012, 2013, 2014 Rick Waldron <waldron.rick@gmail.com>
+Copyright (c) 2012-2014 Rick Waldron <waldron.rick@gmail.com>
 Licensed under the MIT license.
-Copyright (c) 2016 The Johnny-Five Contributors
+Copyright (c) 2015-2018 The Johnny-Five Contributors
 Licensed under the MIT license.
 
 <!--remove-end-->

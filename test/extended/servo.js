@@ -1,93 +1,30 @@
-var MockFirmata = mocks.Firmata;
-var five = require("../../lib/johnny-five.js");
-var sinon = require("sinon");
-var Board = five.Board;
-var Servo = five.Servo;
-
-function newBoard() {
-  var io = new MockFirmata();
-  var board = new Board({
-    io: io,
-    debug: false,
-    repl: false
-  });
-
-  io.emit("ready");
-
-  return board;
-}
+require("../common/bootstrap");
 
 exports["Servo"] = {
   setUp: function(done) {
-
     this.board = newBoard();
-
-    this.servoWrite = sinon.spy(this.board.io, "servoWrite");
-
-    this.proto = [{
-      name: "to"
-    }, {
-      name: "step"
-    }, {
-      name: "move"
-    }, {
-      name: "min"
-    }, {
-      name: "max"
-    }, {
-      name: "center"
-    }, {
-      name: "sweep"
-    }, {
-      name: "stop"
-    }, {
-      name: "clockWise"
-    }, {
-      name: "cw"
-    }, {
-      name: "counterClockwise"
-    }, {
-      name: "ccw"
-    }, {
-      name: "write"
-    }];
-
-    this.instance = [{
-      name: "id"
-    }, {
-      name: "pin"
-    }, {
-      name: "mode"
-    }, {
-      name: "range"
-    }, {
-      name: "invert"
-    }, {
-      name: "type"
-    }, {
-      name: "specs"
-    }, {
-      name: "interval"
-    }, {
-      name: "value"
-    }];
+    this.sandbox = sinon.sandbox.create();
+    this.servoWrite = this.sandbox.spy(MockFirmata.prototype, "servoWrite");
 
     done();
   },
 
   tearDown: function(done) {
-    Board.purge();
-    if (this.servo.animation) {
+    if (this.servo && this.servo.animation) {
       this.servo.animation.stop();
     }
-    this.servoWrite.restore();
+
+    Board.purge();
+    Servo.purge();
+    this.sandbox.restore();
+
     done();
   },
 
   center: function(test) {
-    test.expect(5);
+    test.expect(4);
 
-    this.spy = sinon.spy(Servo.prototype, "center");
+    this.spy = this.sandbox.spy(Servo.prototype, "center");
 
     this.servo = new Servo({
       pin: 11,
@@ -98,10 +35,10 @@ exports["Servo"] = {
     // constructor called .center()
     test.ok(this.spy.called);
 
+
     // and servo is actually centered
     test.equal(this.servo.position, 90);
 
-    this.spy.restore();
 
     this.servo.to(180);
     this.servo.center(1000, 100);
@@ -113,10 +50,8 @@ exports["Servo"] = {
     // it fired a move:complete event when finished
     this.servo.on("move:complete", function() {
       test.equal(this.servo.position, 90);
-      test.ok(1, "event fired");
       test.done();
     }.bind(this));
-
   },
 
   min: function(test) {
@@ -132,7 +67,7 @@ exports["Servo"] = {
 
     this.servo.on("move:complete", function() {
       test.equal(this.servo.position, 0);
-      test.ok(this.servoWrite.callCount === 101);
+      test.ok(this.servoWrite.callCount === 101, "Expected 101 calls to servoWrite. Saw " + this.servoWrite.callCount);
       test.done();
     }.bind(this));
   },
@@ -209,7 +144,7 @@ exports["Servo"] = {
 
     this.servo.on("move:complete", function() {
       test.equal(this.servo.position, 0);
-      test.ok(this.servoWrite.callCount === 101);
+      test.ok(this.servoWrite.callCount === 101, "Expected 101 calls to servoWrite. Saw " + this.servoWrite.callCount);
       test.done();
     }.bind(this));
   },
@@ -228,7 +163,7 @@ exports["Servo"] = {
 
     this.servo.on("move:complete", function() {
       test.equal(this.servo.position, 180);
-      test.ok(this.servoWrite.callCount === 101);
+      test.ok(this.servoWrite.callCount === 101, "Expected 101 calls to servoWrite. Saw " + this.servoWrite.callCount);
       test.done();
     }.bind(this));
   },
@@ -267,6 +202,45 @@ exports["Servo"] = {
       test.done();
     }.bind(this));
 
+  },
+
+  toDegreesAndTimeWithOffset: function(test) {
+    test.expect(2);
+    
+    this.servo = new Servo({
+      board: this.board,
+      pin: 11,
+      offset: -10
+    });
+
+    this.servo.to(80, 100);
+
+    this.servo.on("move:complete", function() {
+      test.equal(this.servo.value, 80);
+      test.equal(this.servoWrite.lastCall.args[1], 1300);
+      test.done();
+    }.bind(this));
+    
+  },
+
+  toDegreesAndTimeWithOffsetAndInvert: function(test) {
+    test.expect(2);
+    
+    this.servo = new Servo({
+      board: this.board,
+      pin: 11,
+      offset: -10,
+      invert: true
+    });
+
+    this.servo.to(80, 100);
+
+    this.servo.on("move:complete", function() {
+      test.equal(this.servo.value, 80);
+      test.equal(this.servoWrite.lastCall.args[1], 1700);
+      test.done();
+    }.bind(this));
+    
   },
 
   /* These tests are commented out while we figure out Issue #829

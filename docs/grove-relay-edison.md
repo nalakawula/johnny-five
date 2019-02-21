@@ -51,24 +51,19 @@ board.on("ready", function() {
 
 ## Additional Notes
 For this program, you'll need:
-
 ![Grove Base Shield v2](http://www.seeedstudio.com/depot/images/product/base%20shield%20V2_01.jpg)
 ![Grove - Relay Module](http://www.seeedstudio.com/depot/images/1030200051.jpg)
-
-
 Learn More At:
-
 - [JavaScript: Relay Control with Johnny-Five on Node](http://bocoup.com/weblog/javascript-relay-with-johnny-five/)
-
 
 &nbsp;
 
 <!--remove-start-->
 
 ## License
-Copyright (c) 2012, 2013, 2014 Rick Waldron <waldron.rick@gmail.com>
+Copyright (c) 2012-2014 Rick Waldron <waldron.rick@gmail.com>
 Licensed under the MIT license.
-Copyright (c) 2016 The Johnny-Five Contributors
+Copyright (c) 2015-2018 The Johnny-Five Contributors
 Licensed under the MIT license.
 
 <!--remove-end-->

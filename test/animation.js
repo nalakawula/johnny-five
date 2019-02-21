@@ -219,7 +219,7 @@ exports["Animation -- Servo"] = {
 
     this.animation.target["@@render"](val);
     test.equal(testContext.servoWrite.args[1][0], 3);
-    test.equal(testContext.servoWrite.args[1][1], 80);
+    test.equal(testContext.servoWrite.args[1][1], 1404);
 
     test.done();
   },
@@ -243,7 +243,10 @@ exports["Animation -- Servo"] = {
   },
 
   keyframeEasing: function(test) {
-
+    // Don't allow time to advance in this test.  Otherwise it's possible for
+    // the animation to progress between setup and the assertion, causing flaky
+    // failures.
+    this.sandbox.useFakeTimers();
     this.animation = new Animation(this.a);
     test.expect(1);
 
@@ -260,7 +263,8 @@ exports["Animation -- Servo"] = {
     var indices = this.animation.findIndices(progress);
     var val = this.animation.tweenedValue(indices, progress);
 
-    test.ok(Math.abs(val - 74.843 < 0.01));
+    test.ok(Math.abs(val - 74.843) < 0.01,
+      "Expected " + val + " to be within 0.01 of 74.843");
     test.done();
   },
 
@@ -356,8 +360,32 @@ exports["Animation -- Servo"] = {
     );
 
     test.done();
-  }
+  },
 
+  enqueueOnSameTick: function(test) {
+
+    test.expect(7);
+
+    this.animation = new Animation(this.a);
+
+    this.normalizeKeyframes = this.sandbox.spy(this.animation, "normalizeKeyframes");
+
+    test.equal(this.animation.isRunning, false);
+    test.equal(this.animation.segments.length, 0);
+
+    // This is the first segment so it should be immediately shifted off the queue
+    test.equal(this.animation.enqueue(this.segment.single), this.animation);
+    test.equal(this.animation.segments.length, 0);
+    test.equal(this.animation.isRunning, true);
+
+    // This is the second segment so it should stay in the queue
+    test.equal(this.animation.enqueue(this.segment.single), this.animation);
+    test.equal(this.animation.segments.length, 1);
+
+    this.normalizeKeyframes.restore();
+    test.done();
+
+  }
 };
 
 exports["Animation"] = {
@@ -432,6 +460,7 @@ exports["Animation"] = {
     test.equal(this.animation.segments.length, 1);
     test.done();
   },
+
   next: function(test) {
     test.expect(12);
 
@@ -683,78 +712,6 @@ exports["Animation"] = {
     test.done();
   },
 
-  loopFunctiononcomplete: function(test) {
-    test.expect(2);
-
-    this.clock = this.sandbox.useFakeTimers();
-    this.tfb = this.sandbox.stub(Animation, "TemporalFallback", function() {});
-
-    var startTime = Date.now();
-    var loop = {
-      calledAt: startTime + 1000
-    };
-
-    this.animation.startTime = startTime;
-    this.animation.fallBackTime = 500;
-    this.animation.speed(1);
-
-
-    this.animation.normalizedKeyFrames = [];
-    this.animation.target = {};
-    this.animation.target[Animation.render] = function() {};
-    this.animation.playLoop = null;
-    this.animation.onloop = this.sandbox.stub();
-    this.animation.next = this.sandbox.stub();
-
-    var animation = this.animation;
-
-    this.sandbox.stub(Animation.prototype, "stop");
-    this.animation.oncomplete = function() {
-      test.equal(Animation.TemporalFallback.callCount, 1);
-      test.equal(this, animation);
-
-      animation.oncomplete = null;
-      test.done();
-    };
-
-    this.animation.loopFunction(loop);
-  },
-
-  loopFunctionNOoncompleteSegmentsRemaining: function(test) {
-    test.expect(1);
-
-    this.clock = this.sandbox.useFakeTimers();
-    this.tfb = this.sandbox.stub(Animation, "TemporalFallback", function() {});
-    this.stop = this.sandbox.stub(Animation.prototype, "stop");
-
-    var startTime = Date.now();
-    var loop = {
-      calledAt: startTime + 1000
-    };
-
-    this.animation.startTime = startTime;
-    this.animation.fallBackTime = 500;
-    this.animation.speed(1);
-
-
-    this.animation.normalizedKeyFrames = [];
-    this.animation.target = {};
-    this.animation.target[Animation.render] = function() {};
-    this.animation.playLoop = null;
-    this.animation.onloop = this.sandbox.stub();
-    this.animation.next = this.sandbox.stub();
-
-    this.nextTick = this.sandbox.stub(process, "nextTick");
-
-    this.animation.next = function() {
-      test.equal(this.stop.callCount, 1);
-      test.done();
-    }.bind(this);
-
-    this.animation.segments = [1, 2, 3, 4];
-    this.animation.loopFunction(loop);
-  },
-
   loopFunctionfallBackTimeWithPlayLoop: function(test) {
     test.expect(1);
 
@@ -790,8 +747,14 @@ exports["Animation"] = {
     test.expect(1);
 
     this.clock = this.sandbox.useFakeTimers();
-    this.normalizeKeyframes = this.sandbox.stub(Animation.prototype, "normalizeKeyframes", function() {
-      this.loopback = 1;
+    this.animation.normalizeKeyframes = this.sandbox.stub(Animation.prototype, "normalizeKeyframes", function() {
+      this.animation.loopback = 1;
+      this.animation.normalizedKeyFrames = [[
+        { value: 90, easing: "linear" },
+        { step: false, easing: "linear", value: 90 },
+        { value: 45, easing: "linear" },
+        { step: 33, easing: "linear", value: 78 }
+      ]];
     }.bind(this));
 
     var startTime = Date.now();
@@ -800,7 +763,6 @@ exports["Animation"] = {
     };
 
     this.animation.startTime = startTime;
-    this.animation.normalizedKeyFrames = [];
     this.animation.target = {};
     this.animation.target[Animation.render] = function() {};
     this.animation.speed(1);
@@ -808,10 +770,13 @@ exports["Animation"] = {
     this.animation.metronomic = true;
     this.animation.reverse = false;
     this.animation.loop = true;
+    this.animation.fps = 10;
     this.animation.onloop = this.sandbox.spy();
+    this.animation.normalizeKeyframes();
     this.animation.loopFunction(loop);
 
     test.equal(this.animation.onloop.callCount, 1);
+    this.animation.stop();
     test.done();
   },
 
@@ -1017,8 +982,9 @@ exports["Animation.Segment"] = {
   },
 
   instanceof: function(test) {
-    test.expect(1);
+    test.expect(2);
     test.equal(Animation({}) instanceof Animation, true);
+    test.equal(Animation() instanceof Animation, true);
     test.done();
   },
 

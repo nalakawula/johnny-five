@@ -33,7 +33,6 @@ function testLedRgbShape(test) {
   test.done();
 }
 
-
 exports["RGB"] = {
   setUp: function(done) {
     this.board = newBoard();
@@ -130,7 +129,7 @@ exports["RGB"] = {
   color: function(test) {
     var rgb = this.rgb;
 
-    test.expect(36);
+    test.expect(46);
 
     // returns this
     test.equal(this.rgb.color("#000000"), this.rgb);
@@ -221,6 +220,59 @@ exports["RGB"] = {
 
     // by array
     this.rgb.color([255, 100, 50]);
+    test.ok(this.write.calledOnce);
+    test.ok(this.write.calledWith({
+      red: 255,
+      green: 100,
+      blue: 50
+    }));
+    this.write.reset();
+
+    // CSS functional notation
+    this.rgb.color("rgb(255, 100, 50)");
+    test.ok(this.write.calledOnce);
+    test.ok(this.write.calledWith({
+      red: 255,
+      green: 100,
+      blue: 50
+    }));
+    this.write.reset();
+
+    // CSS functional notation with alpha
+    // Subtle bug: Alpha is translated to intensity using linear scaling
+    // when it should probably use logarithmic scaling.
+    this.rgb.color("rgba(255, 100, 50, 0.5)");
+    test.ok(this.write.calledOnce);
+    test.ok(this.write.calledWith({
+      red: 128,
+      green: 50,
+      blue: 25
+    }));
+    this.write.reset();
+
+    // CSS4 functional notation (rgb and rgba become aliases)
+    this.rgb.color("rgba(255, 100, 50)");
+    test.ok(this.write.calledOnce);
+    test.ok(this.write.calledWith({
+      red: 255,
+      green: 100,
+      blue: 50
+    }));
+    this.write.reset();
+
+    // CSS4 functional notation with alpha (rgb and rgba become aliases)
+    // Also testing with no spaces to make sure that's supported.
+    this.rgb.color("rgb(255,100,50,0.5)");
+    test.ok(this.write.calledOnce);
+    test.ok(this.write.calledWith({
+      red: 128,
+      green: 50,
+      blue: 25
+    }));
+    this.write.reset();
+
+    // CSS4 functional notation without commas
+    this.rgb.color("rgb(255 100 50)");
     test.ok(this.write.calledOnce);
     test.ok(this.write.calledWith({
       red: 255,
@@ -710,6 +762,102 @@ exports["RGB"] = {
 
 };
 
+exports["10-bit RGB"] = {
+  setUp: function(done) {
+    this.board = newBoard();
+    this.sandbox = sinon.sandbox.create();
+    this.analogWrite = this.sandbox.spy(MockFirmata.prototype, "analogWrite");
+
+    // Override PWM Resolution
+    this.board.RESOLUTION.PWM = 1023;
+
+    this.rgb = new RGB({
+      pins: {
+        red: 9,
+        green: 10,
+        blue: 11,
+      },
+      board: this.board
+    });
+
+    this.write = this.sandbox.spy(this.rgb, "write");
+
+    done();
+  },
+
+  tearDown: function(done) {
+    Board.purge();
+    this.sandbox.restore();
+    done();
+  },
+
+  write: function(test) {
+    test.expect(4);
+
+    this.rgb.write({
+      red: 0xbb, // 750 or 0x2ee
+      green: 0xcc, // 819 or 0x333
+      blue: 0xaa // 682 or 0x2aa
+    });
+
+    test.ok(this.analogWrite.callCount, 3);
+    test.deepEqual(this.analogWrite.getCall(3).args, [9, 0x2ee]);
+    test.deepEqual(this.analogWrite.getCall(4).args, [10, 0x332]);
+    test.deepEqual(this.analogWrite.getCall(5).args, [11, 0x2aa]);
+
+    test.done();
+  }
+};
+
+exports["10-bit RGB Common Anode"] = {
+  setUp: function(done) {
+    this.board = newBoard();
+    this.sandbox = sinon.sandbox.create();
+    this.analogWrite = this.sandbox.spy(MockFirmata.prototype, "analogWrite");
+
+    // Override PWM Resolution
+    this.board.RESOLUTION.PWM = 1023;
+
+    this.rgb = new RGB({
+      pins: {
+        red: 9,
+        green: 10,
+        blue: 11,
+      },
+      isAnode: true,
+      board: this.board
+    });
+
+    this.write = this.sandbox.spy(this.rgb, "write");
+
+    done();
+  },
+
+  tearDown: function(done) {
+    Board.purge();
+    this.sandbox.restore();
+    done();
+  },
+
+  write: function(test) {
+    test.expect(4);
+
+    this.analogWrite.reset();
+
+    this.rgb.write({
+      red: 0xbb, // 187 -> 68 -> 273 -> 0x111
+      green: 0xcc, // 204 -> 51 -> 204 -> 0xCC
+      blue: 0xaa // 170 -> 85 -> 341 -> 0x155
+    });
+
+    test.ok(this.analogWrite.callCount, 3);
+    test.deepEqual(this.analogWrite.getCall(0).args, [9, 0x110]);
+    test.deepEqual(this.analogWrite.getCall(1).args, [10, 0xCC]);
+    test.deepEqual(this.analogWrite.getCall(2).args, [11, 0x155]);
+
+    test.done();
+  }
+};
 
 exports["RGB - Cycling Operations"] = {
   setUp: function(done) {
@@ -1172,50 +1320,35 @@ exports["RGB.ToRGB"] = {
 
   "ToRGB([Byte, Byte, Byte])": function(test) {
     test.expect(2);
-
-    var color = Led.RGB.ToRGB([0x00, 0x00, 0x00]);
-
-    test.deepEqual(color, { red: 0, green: 0, blue: 0 });
+    test.deepEqual(Led.RGB.ToRGB([0x00, 0x00, 0x00]), { red: 0, green: 0, blue: 0 });
     test.equal(this.ToRGB.callCount, 1);
     test.done();
   },
 
   "ToRGB({ red, green, blue })": function(test) {
     test.expect(2);
-
-    var color = Led.RGB.ToRGB({ red: 0, green: 0, blue: 0 });
-
-    test.deepEqual(color, { red: 0, green: 0, blue: 0 });
+    test.deepEqual(Led.RGB.ToRGB({ red: 0, green: 0, blue: 0 }), { red: 0, green: 0, blue: 0 });
     test.equal(this.ToRGB.callCount, 1);
     test.done();
   },
 
   "ToRGB('hex')": function(test) {
     test.expect(2);
-
-    var color = Led.RGB.ToRGB("000000");
-
-    test.deepEqual(color, { red: 0, green: 0, blue: 0 });
+    test.deepEqual(Led.RGB.ToRGB("000000"), { red: 0, green: 0, blue: 0 });
     test.equal(this.ToRGB.callCount, 1);
     test.done();
   },
 
   "ToRGB('#hex')": function(test) {
     test.expect(2);
-
-    var color = Led.RGB.ToRGB("#000000");
-
-    test.deepEqual(color, { red: 0, green: 0, blue: 0 });
+    test.deepEqual(Led.RGB.ToRGB("#000000"), { red: 0, green: 0, blue: 0 });
     test.equal(this.ToRGB.callCount, 1);
     test.done();
   },
 
   "ToRGB('name')": function(test) {
     test.expect(3);
-
-    var color = Led.RGB.ToRGB("red");
-
-    test.deepEqual(color, { red: 0xFF, green: 0, blue: 0 });
+    test.deepEqual(Led.RGB.ToRGB("red"), { red: 0xFF, green: 0, blue: 0 });
     // This is called TWICE because the name is
     // translated, and the resulting object is
     // passed as an argument to color(...)
@@ -1226,11 +1359,45 @@ exports["RGB.ToRGB"] = {
 
   "ToRGB(red, green, blue)": function(test) {
     test.expect(2);
-
-    var color = Led.RGB.ToRGB(0xFF, 0x00, 0x00);
-
-    test.deepEqual(color, { red: 0xFF, green: 0, blue: 0 });
+    test.deepEqual(Led.RGB.ToRGB(0xFF, 0x00, 0x00), { red: 0xFF, green: 0, blue: 0 });
     test.equal(this.ToRGB.callCount, 1);
+    test.done();
+  },
+
+  "ToRGB('rgb(r, g, b)')": function(test) {
+    test.expect(4);
+
+    test.deepEqual(Led.RGB.ToRGB("rgb(255,0,0)"), { red: 255, green: 0, blue: 0 });
+    test.deepEqual(Led.RGB.ToRGB("rgb(255, 0, 0)"), { red: 255, green: 0, blue: 0 });
+    test.deepEqual(Led.RGB.ToRGB("rgb(100%, 0%, 0%)"), { red: 255, green: 0, blue: 0 });
+    test.equal(this.ToRGB.callCount, 3);
+    test.done();
+  },
+
+  "ToRGB('rgba(r, g, b, a)')": function(test) {
+    test.expect(5);
+    test.deepEqual(Led.RGB.ToRGB("rgb(255,0,0,1)"), { red: 255, green: 0, blue: 0 });
+    test.deepEqual(Led.RGB.ToRGB("rgb(255, 0, 0, 1)"), { red: 255, green: 0, blue: 0 });
+    test.deepEqual(Led.RGB.ToRGB("rgb(255, 0, 0, 0.5)"), { red: 128, green: 0, blue: 0 });
+    test.deepEqual(Led.RGB.ToRGB("rgb(100%, 0%, 0%, 50%)"), { red: 128, green: 0, blue: 0 });
+    test.equal(this.ToRGB.callCount, 4);
+    test.done();
+  },
+
+  "ToRGB('rgb(r g b)')": function(test) {
+    test.expect(3);
+    test.deepEqual(Led.RGB.ToRGB("rgb(255 0 0)"), { red: 255, green: 0, blue: 0 });
+    test.deepEqual(Led.RGB.ToRGB("rgb(100% 0% 0%)"), { red: 255, green: 0, blue: 0 });
+    test.equal(this.ToRGB.callCount, 2);
+    test.done();
+  },
+
+  "ToRGB('rgba(r g b a)')": function(test) {
+    test.expect(4);
+    test.deepEqual(Led.RGB.ToRGB("rgb(255 0 0 1)"), { red: 255, green: 0, blue: 0 });
+    test.deepEqual(Led.RGB.ToRGB("rgb(255 0 0 0.5)"), { red: 128, green: 0, blue: 0 });
+    test.deepEqual(Led.RGB.ToRGB("rgb(100% 0% 0% 50%)"), { red: 128, green: 0, blue: 0 });
+    test.equal(this.ToRGB.callCount, 3);
     test.done();
   },
 
@@ -1259,3 +1426,10 @@ exports["RGB.ToScaledRGB"] = {
     test.done();
   },
 };
+
+Object.keys(RGB.Controllers).forEach(function(name) {
+  exports["RGB - Controller, " + name] = addControllerTest(RGB, RGB.Controllers[name], {
+    controller: name,
+    pins: [1, 2, 3]
+  });
+});

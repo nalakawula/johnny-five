@@ -51,20 +51,18 @@ board.on("ready", function() {
 
 
 ## Additional Notes
-
 Control multiple LEDs at once by creating an LED collection (`Leds`).
 All must be on PWM pins if you want to use methods such
 as `pulse()` or `fade()`
-
 
 &nbsp;
 
 <!--remove-start-->
 
 ## License
-Copyright (c) 2012, 2013, 2014 Rick Waldron <waldron.rick@gmail.com>
+Copyright (c) 2012-2014 Rick Waldron <waldron.rick@gmail.com>
 Licensed under the MIT license.
-Copyright (c) 2016 The Johnny-Five Contributors
+Copyright (c) 2015-2018 The Johnny-Five Contributors
 Licensed under the MIT license.
 
 <!--remove-end-->

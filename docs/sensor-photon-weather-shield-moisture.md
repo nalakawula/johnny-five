@@ -66,22 +66,18 @@ board.on("ready", function() {
 
 ## Additional Notes
 For this program, you'll need:
-
 ![Particle Photon](https://docs.particle.io/assets/images/photon_vector2_600.png)
-
 ![SparkFun Photon Weather Shield](https://cdn.sparkfun.com//assets/parts/1/1/0/1/7/13630-01a.jpg)
-
 ![SparkFun Soil Moisture Sensor](https://cdn.sparkfun.com//assets/parts/1/0/6/1/0/13322-01.jpg)
-
 
 &nbsp;
 
 <!--remove-start-->
 
 ## License
-Copyright (c) 2012, 2013, 2014 Rick Waldron <waldron.rick@gmail.com>
+Copyright (c) 2012-2014 Rick Waldron <waldron.rick@gmail.com>
 Licensed under the MIT license.
-Copyright (c) 2016 The Johnny-Five Contributors
+Copyright (c) 2015-2018 The Johnny-Five Contributors
 Licensed under the MIT license.
 
 <!--remove-end-->

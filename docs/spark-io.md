@@ -73,26 +73,19 @@ board.on("ready", function() {
 
 
 ## Additional Notes
-
 In order to use the spark-io library, you will need to load the special
 [voodoospark](https://github.com/voodootikigod/voodoospark) firmware onto your
 device. We recommend you review [VoodooSpark's Getting Started](https://github.com/voodootikigod/voodoospark#getting-started) before continuing.
-
 We also recommend storing your Spark token and device ID in a dot file so they can be accessed as properties of `process.env`. Create a file in your home directory called `.sparkrc` that contains:
-
 ```sh
 export SPARK_TOKEN="your spark token"
 export SPARK_DEVICE_ID="your device id"
 ```
-
 Then add the following to your dot-rc file of choice:
-
 ```sh
 source ~/.sparkrc
 ```
-
 Ensure your host computer (where you're running your Node application) and the Spark are on the same local network.
-
 
 
 ## Learn More
@@ -104,9 +97,9 @@ Ensure your host computer (where you're running your Node application) and the S
 <!--remove-start-->
 
 ## License
-Copyright (c) 2012, 2013, 2014 Rick Waldron <waldron.rick@gmail.com>
+Copyright (c) 2012-2014 Rick Waldron <waldron.rick@gmail.com>
 Licensed under the MIT license.
-Copyright (c) 2016 The Johnny-Five Contributors
+Copyright (c) 2015-2018 The Johnny-Five Contributors
 Licensed under the MIT license.
 
 <!--remove-end-->

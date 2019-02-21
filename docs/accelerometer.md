@@ -120,21 +120,18 @@ board.on("ready", function() {
 
 
 ## Additional Notes
-
 - [Triple Axis Accelerometer, MMA7361](https://www.sparkfun.com/products/9652)
 - [Triple-Axis Accelerometer, ADXL326](http://www.adafruit.com/products/1018)
-
 - [Two or Three Axis Accelerometer, LIS344AL](http://www.st.ewi.tudelft.nl/~gemund/Courses/In4073/Resources/LIS344AL.pdf)
-
 
 &nbsp;
 
 <!--remove-start-->
 
 ## License
-Copyright (c) 2012, 2013, 2014 Rick Waldron <waldron.rick@gmail.com>
+Copyright (c) 2012-2014 Rick Waldron <waldron.rick@gmail.com>
 Licensed under the MIT license.
-Copyright (c) 2016 The Johnny-Five Contributors
+Copyright (c) 2015-2018 The Johnny-Five Contributors
 Licensed under the MIT license.
 
 <!--remove-end-->

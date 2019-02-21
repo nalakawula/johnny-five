@@ -634,7 +634,7 @@ exports["Expander - MCP23017"] = {
   },
 
   digitalRead: function(test) {
-    test.expect(1);
+    test.expect(2);
 
     var spy = this.sandbox.spy();
 
@@ -667,6 +667,9 @@ exports["Expander - MCP23017"] = {
       [32, 19, 1]
     ];
 
+    var numOfEvents = this.expander.eventNames().filter(event => event.startsWith("digital-read")).length;
+
+    test.equal(numOfEvents, 16);
     test.deepEqual(
       this.i2cRead.args.map(function(args) {
         return args.slice(0, -1);
@@ -2902,6 +2905,32 @@ exports["Expander - 74HC595"] = {
   initialization: function(test) {
     test.expect(1);
     test.equal(this.shiftOut.callCount, 1);
+    test.done();
+  },
+
+  multipleInstancesOfNonAddressableExpanders: function(test) {
+    test.expect(1);
+
+    test.doesNotThrow(function() {
+      new five.Expander({
+        controller: "74HC595",
+        pins: {
+          data: 6,
+          clock: 7,
+          latch: 8,
+        }
+      });
+
+      new five.Expander({
+        controller: "74HC595",
+        pins: {
+          data: 9,
+          clock: 10,
+          latch: 11,
+        }
+      });
+    });
+
     test.done();
   },
 

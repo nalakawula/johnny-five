@@ -21,6 +21,11 @@ exports["Servo.Collection"] = {
       pin: 9,
       board: this.board
     });
+    
+    this.d = new Servo({
+      pin: 11,
+      board: this.board
+    });
 
     this.spies = [
       "to", "stop"
@@ -95,12 +100,12 @@ exports["Servo.Collection"] = {
     }]);
 
     this.servos.to(180);
-    test.ok(this.servoWrite.calledWith(9, 180));
-    test.ok(this.servoWrite.calledWith(11, 180));
+    test.ok(this.servoWrite.calledWith(9, 2400));
+    test.ok(this.servoWrite.calledWith(11, 2400));
 
     this.servos.home();
-    test.ok(this.servoWrite.calledWith(9, 40));
-    test.ok(this.servoWrite.calledWith(11, 20));
+    test.ok(this.servoWrite.calledWith(9, 1000));
+    test.ok(this.servoWrite.calledWith(11, 800));
 
     test.done();
   },
@@ -127,8 +132,56 @@ exports["Servo.Collection"] = {
     test.done();
   },
 
+  "Animation.normalize-nested": function(test) {
+    test.expect(1);
+
+    var group1 = new Servos([
+      this.a, this.b
+    ]);
+
+    var group2 = new Servos([
+      this.c, this.d
+    ]);
+
+    var bothGroups = new Servos([
+      group1, group2
+    ]);
+
+    var normalized = bothGroups[Animation.normalize]([
+      [
+        [
+          null,
+          10,
+        ]
+      ],
+      [
+        [
+          null,
+          20,
+        ]
+      ]
+    ]);
+
+    test.deepEqual(normalized, [
+      [ 
+        [ 
+          { value: 90, easing: "linear" }, 
+          { step: 10, easing: "linear" }
+        ]
+      ],
+      [ 
+        [ 
+          { value: 90, easing: "linear" },
+          { step: 20, easing: "linear" }
+        ]
+      ]
+    ]);
+
+    test.done();
+  },
+  
   "Animation.normalize": function(test) {
-    test.expect(2);
+    test.expect(3);
 
     var servos = new Servo.Collection([
       this.a, this.b, this.c
@@ -184,6 +237,36 @@ exports["Servo.Collection"] = {
       ],
       [
         { value: servos[1].startAt, easing: "linear" },
+        { step: 10, easing: "linear" },
+      ],
+    ]);
+
+    normalized = servos[Animation.normalize]([
+      [
+        20,
+        40
+      ],
+      [
+        null,
+        10,
+      ],
+      [
+        30,
+        10,
+      ],
+    ]);
+
+    test.deepEqual(normalized, [
+      [
+        { value: servos[0].startAt + 20, easing: "linear" },
+        { step: 40, easing: "linear" },
+      ],
+      [
+        { value: servos[1].startAt, easing: "linear" },
+        { step: 10, easing: "linear" },
+      ],
+      [
+        { value: servos[2].startAt + 30, easing: "linear" },
         { step: 10, easing: "linear" },
       ],
     ]);

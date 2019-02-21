@@ -1229,6 +1229,274 @@ exports["Motor: Inverse Speed With Brake"] = {
 
 };
 
+exports["Motor: 10-Bit"] = {
+  setUp: function(done) {
+    this.sandbox = sinon.sandbox.create();
+    this.board = newBoard();
+
+    // Override PWM Resolution
+    this.board.RESOLUTION.PWM = 1023;
+
+    this.analogWrite = this.sandbox.spy(MockFirmata.prototype, "analogWrite");
+    this.digitalWrite = this.sandbox.spy(MockFirmata.prototype, "digitalWrite");
+    this.motor = new Motor({
+      board: this.board,
+      pins: [11, 12]
+    });
+
+    this.proto = [{
+      name: "dir"
+    }, {
+      name: "start"
+    }, {
+      name: "stop"
+    }, {
+      name: "resume"
+    }, {
+      name: "setPin"
+    }, {
+      name: "setPWM"
+    }];
+
+    this.instance = [{
+      name: "pins"
+    }, {
+      name: "threshold"
+    }, {
+      name: "speed"
+    }];
+
+    done();
+  },
+
+  tearDown: function(done) {
+    Board.purge();
+    this.sandbox.restore();
+    done();
+  },
+
+  shape: function(test) {
+    test.expect(this.proto.length + this.instance.length);
+
+    this.proto.forEach(function(method) {
+      test.equal(typeof this.motor[method.name], "function");
+    }, this);
+
+    this.instance.forEach(function(property) {
+      test.notEqual(typeof this.motor[property.name], "undefined");
+    }, this);
+
+    test.done();
+  },
+
+  startStop: function(test) {
+    test.expect(3);
+
+    this.analogWrite.reset();
+    this.motor.start();
+    test.deepEqual(this.analogWrite.args[0], [11, 513]);
+
+    this.analogWrite.reset();
+    this.motor.stop();
+    test.deepEqual(this.analogWrite.args[0], [11, 0]);
+
+    this.analogWrite.reset();
+    this.motor.start();
+    test.deepEqual(this.analogWrite.args[0], [11, 513]);
+
+    test.done();
+  },
+
+  forward: function(test) {
+    test.expect(2);
+
+    this.motor.forward(128);
+    test.ok(this.analogWrite.lastCall.calledWith(11, 513));
+    test.ok(this.digitalWrite.lastCall.calledWith(12, 1));
+
+    test.done();
+  },
+
+  reverse: function(test) {
+    test.expect(2);
+
+    this.motor.reverse(128);
+    test.ok(this.analogWrite.lastCall.calledWith(11, 513));
+    test.ok(this.digitalWrite.lastCall.calledWith(12, 0));
+
+    test.done();
+  },
+
+  brake: function(test) {
+    test.expect(6);
+
+    this.motor.rev(128);
+    test.ok(this.analogWrite.firstCall.calledWith(11, 0));
+    test.ok(this.digitalWrite.lastCall.calledWith(12, 0));
+    this.analogWrite.reset();
+    this.digitalWrite.reset();
+
+    this.motor.brake();
+    test.ok(this.analogWrite.lastCall.calledWith(11, 0));
+    this.analogWrite.reset();
+    this.digitalWrite.reset();
+
+    this.motor.release();
+    test.ok(this.analogWrite.lastCall.calledWith(11, 513));
+    this.analogWrite.reset();
+    this.digitalWrite.reset();
+
+    this.motor.forward(180);
+    this.analogWrite.reset();
+    this.digitalWrite.reset();
+
+    this.motor.brake();
+    test.ok(this.analogWrite.lastCall.calledWith(11, 0));
+    this.analogWrite.reset();
+    this.digitalWrite.reset();
+
+    this.motor.release();
+    test.ok(this.analogWrite.lastCall.calledWith(11, 722));
+
+    test.done();
+  },
+};
+
+exports["Motor: 10-Bit With Inverse"] = {
+  setUp: function(done) {
+    this.sandbox = sinon.sandbox.create();
+    this.board = newBoard();
+
+    // Override PWM Resolution
+    this.board.RESOLUTION.PWM = 1024;
+
+    this.analogWrite = this.sandbox.spy(MockFirmata.prototype, "analogWrite");
+    this.digitalWrite = this.sandbox.spy(MockFirmata.prototype, "digitalWrite");
+    this.motor = new Motor({
+      board: this.board,
+      pins: [11, 12],
+      invertPWM: true
+    });
+
+    this.proto = [{
+      name: "dir"
+    }, {
+      name: "start"
+    }, {
+      name: "stop"
+    }, {
+      name: "resume"
+    }, {
+      name: "setPin"
+    }, {
+      name: "setPWM"
+    }];
+
+    this.instance = [{
+      name: "pins"
+    }, {
+      name: "threshold"
+    }, {
+      name: "speed"
+    }];
+
+    done();
+  },
+
+  tearDown: function(done) {
+    Board.purge();
+    this.sandbox.restore();
+    done();
+  },
+
+  shape: function(test) {
+    test.expect(this.proto.length + this.instance.length);
+
+    this.proto.forEach(function(method) {
+      test.equal(typeof this.motor[method.name], "function");
+    }, this);
+
+    this.instance.forEach(function(property) {
+      test.notEqual(typeof this.motor[property.name], "undefined");
+    }, this);
+
+    test.done();
+  },
+
+  startStop: function(test) {
+    test.expect(3);
+
+    this.analogWrite.reset();
+    this.motor.start();
+    test.deepEqual(this.analogWrite.args[0], [11, 509]);
+
+    this.analogWrite.reset();
+    this.motor.stop();
+    test.deepEqual(this.analogWrite.args[0], [11, 1024]);
+
+    this.analogWrite.reset();
+    this.motor.start();
+    test.deepEqual(this.analogWrite.args[0], [11, 509]);
+
+    test.done();
+  },
+
+  forward: function(test) {
+    test.expect(2);
+
+    this.motor.forward(128);
+    test.ok(this.analogWrite.lastCall.calledWith(11, 509));
+    test.ok(this.digitalWrite.lastCall.calledWith(12, 1));
+
+    test.done();
+  },
+
+  reverse: function(test) {
+    test.expect(2);
+
+    this.motor.reverse(128);
+    test.ok(this.analogWrite.lastCall.calledWith(11, 514));
+    test.ok(this.digitalWrite.lastCall.calledWith(12, 0));
+
+    test.done();
+  },
+
+  brake: function(test) {
+    test.expect(7);
+
+    this.motor.rev(128);
+    test.ok(this.analogWrite.firstCall.calledWith(11, 1024));
+    test.ok(this.analogWrite.lastCall.calledWith(11, 514));
+    test.ok(this.digitalWrite.lastCall.calledWith(12, 0));
+    this.analogWrite.reset();
+    this.digitalWrite.reset();
+
+    this.motor.brake();
+    test.ok(this.analogWrite.lastCall.calledWith(11, 0));
+    this.analogWrite.reset();
+    this.digitalWrite.reset();
+
+    this.motor.release();
+    test.ok(this.analogWrite.lastCall.calledWith(11, 514));
+    this.analogWrite.reset();
+    this.digitalWrite.reset();
+
+    this.motor.forward(180);
+    this.analogWrite.reset();
+    this.digitalWrite.reset();
+
+    this.motor.brake();
+    test.ok(this.analogWrite.lastCall.calledWith(11, 1024));
+    this.analogWrite.reset();
+    this.digitalWrite.reset();
+
+    this.motor.release();
+    test.ok(this.analogWrite.lastCall.calledWith(11, 301));
+
+    test.done();
+  },
+};
+
 exports["Motor: I2C - PCA9685"] = {
   setUp: function(done) {
     this.sandbox = sinon.sandbox.create();
@@ -1292,7 +1560,8 @@ exports["Motor: I2C - PCA9685"] = {
       controller: "PCA9685",
       address: 0xff,
       bus: "i2c-1",
-      board: this.board
+      board: this.board,
+      pins: [8, 9, 10]
     });
 
     var forwarded = this.i2cConfig.lastCall.args[0];
@@ -2053,62 +2322,88 @@ exports["Motor.Collection"] = {
   },
 
   initFromMotorNumbers: function(test) {
-    test.expect(1);
+    test.expect(4);
 
     var motors = new Motor.Collection([{
-      pwm: 3,
-      dir: 4
+      pins: {
+        pwm: 3,
+        dir: 4
+      }
     }, {
-      pwm: 5,
-      dir: 6
+      pins: {
+        pwm: 5,
+        dir: 6
+      }
     }, {
-      pwm: 9,
-      dir: 10
+      pins: {
+        pwm: 9,
+        dir: 10
+      }
     }]);
 
     test.equal(motors.length, 3);
+
+    test.equal(motors[0] instanceof Motor, true);
+    test.equal(motors[1] instanceof Motor, true);
+    test.equal(motors[2] instanceof Motor, true);
+  
     test.done();
   },
 
   initFromMotors: function(test) {
-    test.expect(1);
+    test.expect(4);
 
     var motors = new Motor.Collection([
       this.a, this.b, this.c
     ]);
 
-    test.equal(motors.length, 3);
+    test.equal(motors[0] instanceof Motor, true);
+    test.equal(motors[1] instanceof Motor, true);
+    test.equal(motors[2] instanceof Motor, true);
+    
+  test.equal(motors.length, 3);
     test.done();
   },
 
   callForwarding: function(test) {
-    test.expect(3);
+    test.expect(7);
 
     var motors = new Motor.Collection([{
-      pwm: 3,
-      dir: 4
+      pins: {
+        pwm: 3,
+        dir: 4
+      }
     }, {
-      pwm: 5,
-      dir: 6
+      pins: {
+        pwm: 5,
+        dir: 6
+      }
     }, {
-      pwm: 9,
-      dir: 10
+      pins: {
+        pwm: 9,
+        dir: 10
+      }
     }]);
 
     motors.start(90);
 
     test.equal(this.start.callCount, motors.length);
+    test.equal(this.stop.callCount, motors.length);
     test.equal(this.start.getCall(0).args[0], 90);
+
+    test.equal(motors[0] instanceof Motor, true);
+    test.equal(motors[1] instanceof Motor, true);
+    test.equal(motors[2] instanceof Motor, true);
 
     motors.stop();
 
-    test.equal(this.stop.callCount, motors.length);
+    test.equal(this.stop.callCount, motors.length * 2);
 
     test.done();
   },
 
   collectionFromArray: function(test) {
-    test.expect(9);
+    test.expect(12);
 
     var motors = new Motor.Collection([this.a, this.b]);
     var collectionFromArray = new Motor.Collection([motors, this.c]);
@@ -2127,6 +2422,10 @@ exports["Motor.Collection"] = {
 
     collectionFromArray.stop();
 
+    test.equal(collectionFromArray[0][0] instanceof Motor, true);
+    test.equal(collectionFromArray[0][1] instanceof Motor, true);
+    test.equal(collectionFromArray[1] instanceof Motor, true);
+    
     test.equal(this.stop.callCount, 3);
 
     test.done();
@@ -2382,3 +2681,163 @@ exports["Motor: GROVE_I2C_MOTOR_DRIVER"] = {
     test.done();
   }
 };
+
+exports["Motor: Require Pins"] = {
+  setUp: function(done) {
+    this.sandbox = sinon.sandbox.create();
+    this.board = newBoard();
+
+    this.proto = [{
+      name: "dir"
+    }, {
+      name: "start"
+    }, {
+      name: "stop"
+    }, {
+      name: "forward"
+    }, {
+      name: "fwd"
+    }, {
+      name: "reverse"
+    }, {
+      name: "rev"
+    }, {
+      name: "resume"
+    }, {
+      name: "setPin"
+    }, {
+      name: "setPWM"
+    }];
+
+    this.instance = [{
+      name: "pins"
+    }, {
+      name: "threshold"
+    }, {
+      name: "speed"
+    }];
+
+    done();
+  },
+
+  tearDown: function(done) {
+    Board.purge();
+    this.sandbox.restore();
+    Expander.purge();
+    done();
+  },
+
+  nondirectionalMissingPins: function(test) {
+    test.expect(3);
+    
+    test.throws(function() {
+      new Motor();
+    }, "PWM pin must be defined");
+    
+    test.throws(function() {
+      new Motor({
+        device: "NONDIRECTIONAL"
+      });
+    }, "PWM pin must be defined");
+
+    test.throws(function() {
+      new Motor({
+        device: "NONDIRECTIONAL",
+        pins: {
+          dir: 1
+        }
+      });
+    }, "PWM pin must be defined");
+
+    test.done();
+  },
+  
+  directionalMissingPins: function(test) {
+    test.expect(4);
+    
+    test.throws(function() {
+      new Motor({
+        device: "DIRECTIONAL"
+      });
+    }, "PWM pin must be defined");
+
+    test.throws(function() {
+      new Motor({
+        device: "DIRECTIONAL",
+        pins: [1]
+      });
+    }, "DIR pin must be defined");
+
+    test.throws(function() {
+      new Motor({
+        device: "DIRECTIONAL",
+        pins: {
+          pwm: 1
+        }
+      });
+    }, "DIR pin must be defined");
+
+    test.throws(function() {
+      new Motor({
+        device: "DIRECTIONAL",
+        pins: {
+          pwm: 1,
+          cdir: 2
+        }
+      });
+    }, "DIR pin must be defined");
+
+    test.done();
+  },
+  
+  cdirMissingPins: function(test) {
+    test.expect(4);
+    
+    test.throws(function() {
+      new Motor({
+        device: "CDIR"
+      });
+    }, "PWM pin must be defined");
+
+    test.throws(function() {
+      new Motor({
+        device: "CDIR",
+        pins: [1, 2]
+      });
+    }, "CDIR pin must be defined");
+
+    test.throws(function() {
+      new Motor({
+        device: "CDIR",
+        pins: {
+          pwm: 1
+        }
+      });
+    }, "CDIR pin must be defined");
+
+    test.throws(function() {
+      new Motor({
+        device: "CDIR",
+        pins: {
+          pwm: 1,
+          dir: 2
+        }
+      });
+    }, "CDIR pin must be defined");
+
+    test.done();
+  }
+};
+
+Object.keys(Motor.Controllers).forEach(function(name) {
+
+  // These are duplicates
+  if (name.startsWith("GROVE_") || name.startsWith("EVS_") || name.startsWith("Shift")) {
+    return;
+  }
+
+  exports["Motor - Controller, " + name] = addControllerTest(Motor, Motor.Controllers[name], {
+    controller: name,
+    pins: [8, 9]
+  });
+});
