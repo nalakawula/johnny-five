@@ -155,14 +155,6 @@
     "classes": ["Led.RGB"],
     "examples": [
       {
-        "file": "led-rgb.js",
-        "title": "LED - RGB",
-        "description": "Demonstrates use of an RGB LED (common cathode) by setting its color to red (`#ff0000`) and making it blink. Requires RGB LED on pins that support PWM (usually denoted by ~).",
-        "breadboards": [
-          {"name": "led-rgb", "title": "Common Cathode RGB LED. (Arduino UNO)", "description": "RGB LED connected to pins 6, 5, and 3 for red, green, and blue respectively. The common pin is connected to ground."}
-        ]
-      },
-      {
         "file": "led-rgb-anode.js",
         "title": "LED - RGB (Common Anode)",
         "description": "Demonstrates use of an RGB LED (common anode) by setting its color to red (`#ff0000`) and making it blink. Requires RGB LED on pins that support PWM (usually denoted by ~).",
@@ -316,13 +308,6 @@
         ]
       },
       {
-        "file": "servo-sweep.js",
-        "title": "Servo - Sweep",
-        "breadboards": [
-          {"name": "servo", "title": "Servo on pin 10", "description": "Servo connected to pin 10. Requires servo on pin that supports PWM (usually denoted by ~)."}
-        ]
-      },
-      {
         "file": "servo-array.js",
         "title": "Servos - An array of servos",
         "breadboards": [
@@ -347,6 +332,11 @@
         "externals": [
           { "title": "GPS Receiver - GP-20U7 (56 Channel)", "href": "https://www.sparkfun.com/products/13740"}
         ]
+      },
+      {
+        "file": "gps-hardware-serial.js",
+        "title": "GPS - Hardware Serial",
+        "description": "When using GPS class with an Arduino (or similar microcontroller), be sure to upload the StandardFirmataPlus firmware to your board."
       },
       {
         "file": "gps-adafruit.js",
@@ -474,6 +464,10 @@
       {
         "file": "motor-drv8871.js",
         "title": "Motor - Adafruit DRV8871 DC Motor Driver Breakout"
+      },
+      {
+        "file": "motor-vnh5019.js",
+        "title": "Motor - Pololu VNH5019 Dual Motor Driver Breakout"
       }
     ]
   },
@@ -484,6 +478,10 @@
       {
         "file": "stepper-driver.js",
         "title": "Stepper - Driver"
+      },
+      {
+        "file": "stepper-four_wire.js",
+        "title": "Stepper - Four Wire"
       },
       {
         "file": "stepper-sweep.js",
@@ -500,24 +498,12 @@
         "title": "ESC - Keypress controlled ESCs"
       },
       {
-        "file": "esc-dualshock.js",
-        "title": "ESC - Dualshock controlled ESCs"
-      },
-      {
         "file": "esc-PCA9685.js",
         "title": "ESC - PCA9685"
       },
       {
         "file": "esc-bidirectional.js",
         "title": "ESC - Bidirectional"
-      },
-      {
-        "file": "esc-bidirectional-forward-reverse.js",
-        "title": "ESC - Bidirectional Forward-Reverse"
-      },
-      {
-        "file": "esc-array.js",
-        "title": "ESCs - An array of ESCs"
       }
     ]
   },
@@ -567,6 +553,10 @@
       {
         "file": "switch-tilt-SW_200D.js",
         "title": "Switch - Tilt SW-200D"
+      },
+      {
+        "file": "switch.js",
+        "title": "Switch"
       }
     ]
   },
@@ -1228,6 +1218,10 @@
       {
         "file": "temperature-ds18b20.js",
         "title": "Thermometer - DS18B20"
+      },
+      {
+        "file": "temperature-dual-ds18b20.js",
+        "title": "Thermometer - Dual DS18B20"
       },
       {
         "file": "temperature-max31850k.js",
@@ -2147,10 +2141,6 @@
       {
         "file": "phoenix.js",
         "title": "Phoenix Hexapod"
-      },
-      {
-        "file": "boe-test-servos.js",
-        "title": "BOE Bot"
       },
       {
         "file": "bug.js",

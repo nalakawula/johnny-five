@@ -31,15 +31,14 @@ node eg/led-array.js
 
 
 ```javascript
-var five = require("johnny-five");
-var board = new five.Board();
+const {Board, Leds} = require("johnny-five");
+const board = new Board();
 
-board.on("ready", function() {
-  var array = new five.Leds([3, 5, 6]);
+board.on("ready", () => {
+  const leds = new Leds([3, 5, 6]);
 
-  array.pulse();
+  leds.pulse();
 });
-
 
 ```
 
@@ -62,7 +61,7 @@ as `pulse()` or `fade()`
 ## License
 Copyright (c) 2012-2014 Rick Waldron <waldron.rick@gmail.com>
 Licensed under the MIT license.
-Copyright (c) 2015-2018 The Johnny-Five Contributors
+Copyright (c) 2015-2021 The Johnny-Five Contributors
 Licensed under the MIT license.
 
 <!--remove-end-->

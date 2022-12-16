@@ -31,15 +31,15 @@ node eg/board.js
 
 
 ```javascript
-var five = require("johnny-five");
-var board = new five.Board();
+const { Board, Led } = require("johnny-five");
+const board = new Board();
 
 // The board's pins will not be accessible until
 // the board has reported that it is ready
-board.on("ready", function() {
+board.on("ready", () => {
   console.log("Ready!");
 
-  var led = new five.Led(13);
+  const led = new Led(13);
   led.blink(500);
 });
 
@@ -59,7 +59,7 @@ board.on("ready", function() {
 ## License
 Copyright (c) 2012-2014 Rick Waldron <waldron.rick@gmail.com>
 Licensed under the MIT license.
-Copyright (c) 2015-2018 The Johnny-Five Contributors
+Copyright (c) 2015-2021 The Johnny-Five Contributors
 Licensed under the MIT license.
 
 <!--remove-end-->

@@ -18,15 +18,15 @@ node eg/led-tessel-servo-module.js
 
 
 ```javascript
-var five = require("johnny-five");
-var Tessel = require("tessel-io");
+const { Board, Led } = require("johnny-five");
+const Tessel = require("tessel-io");
 
-var board = new five.Board({
+const board = new Board({
   io: new Tessel()
 });
 
-board.on("ready", function() {
-  var led = new five.Led({
+board.on("ready", () => {
+  const led = new Led({
     pin: process.argv[2] || 1,
     address: 0x73,
     port: "A",
@@ -42,9 +42,7 @@ board.on("ready", function() {
   // port: The Tessel port being used "A" or "B"
 
   // Add LED to REPL (optional)
-  this.repl.inject({
-    led: led
-  });
+  board.repl.inject({ led });
 
   led.pulse();
 });
@@ -65,7 +63,7 @@ board.on("ready", function() {
 ## License
 Copyright (c) 2012-2014 Rick Waldron <waldron.rick@gmail.com>
 Licensed under the MIT license.
-Copyright (c) 2015-2018 The Johnny-Five Contributors
+Copyright (c) 2015-2021 The Johnny-Five Contributors
 Licensed under the MIT license.
 
 <!--remove-end-->

@@ -32,7 +32,7 @@ node eg/raspi-io.js
 
 ```javascript
 var five = require("johnny-five");
-var Raspi = require("raspi-io");
+var Raspi = require("raspi-io").RaspiIO;
 var board = new five.Board({
   io: new Raspi()
 });
@@ -71,7 +71,7 @@ npm install johnny-five raspi-io
 ## License
 Copyright (c) 2012-2014 Rick Waldron <waldron.rick@gmail.com>
 Licensed under the MIT license.
-Copyright (c) 2015-2018 The Johnny-Five Contributors
+Copyright (c) 2015-2021 The Johnny-Five Contributors
 Licensed under the MIT license.
 
 <!--remove-end-->

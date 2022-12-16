@@ -70,7 +70,7 @@ board.on("ready", function() {
 
 
 ## Additional Notes
-- [MPL3115A2 - I2C Barometric Pressure/Altimiter/Temperature Sensor](https://www.adafruit.com/products/1893)
+- [MPL3115A2 - I2C Barometric Pressure/Altimiter/Thermometer Sensor](https://www.adafruit.com/products/1893)
 - [SparkFun Altitude/Pressure Sensor Breakout - MPL3115A2](https://www.sparkfun.com/products/11084)
 - [SparkFun Weather Shield](https://www.sparkfun.com/products/12081)
 - [SparkFun Photon Weather Shield](https://www.sparkfun.com/products/13630)
@@ -87,7 +87,7 @@ board.on("ready", function() {
 ## License
 Copyright (c) 2012-2014 Rick Waldron <waldron.rick@gmail.com>
 Licensed under the MIT license.
-Copyright (c) 2015-2018 The Johnny-Five Contributors
+Copyright (c) 2015-2021 The Johnny-Five Contributors
 Licensed under the MIT license.
 
 <!--remove-end-->

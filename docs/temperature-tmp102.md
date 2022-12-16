@@ -29,16 +29,21 @@ node eg/temperature-tmp102.js
 
 
 ```javascript
-var five = require("johnny-five");
-var board = new five.Board();
+const { Board, Thermometer } = require("johnny-five");
+const board = new Board();
 
-board.on("ready", function() {
-  var temperature = new five.Thermometer({
+board.on("ready", () => {
+  const thermometer = new Thermometer({
     controller: "TMP102"
   });
 
-  temperature.on("change", function() {
-    console.log(this.celsius + "°C", this.fahrenheit + "°F");
+  thermometer.on("change", () => {
+    const {celsius, fahrenheit, kelvin} = thermometer;
+    console.log("Thermometer");
+    console.log("  celsius      : ", celsius);
+    console.log("  fahrenheit   : ", fahrenheit);
+    console.log("  kelvin       : ", kelvin);
+    console.log("--------------------------------------");
   });
 });
 
@@ -53,7 +58,7 @@ board.on("ready", function() {
 
 
 ## Additional Notes
-- [TMP102 - Temperature Sensor](https://www.sparkfun.com/products/11931)
+- [TMP102 - Thermometer Sensor](https://www.sparkfun.com/products/11931)
 
 &nbsp;
 
@@ -62,7 +67,7 @@ board.on("ready", function() {
 ## License
 Copyright (c) 2012-2014 Rick Waldron <waldron.rick@gmail.com>
 Licensed under the MIT license.
-Copyright (c) 2015-2018 The Johnny-Five Contributors
+Copyright (c) 2015-2021 The Johnny-Five Contributors
 Licensed under the MIT license.
 
 <!--remove-end-->

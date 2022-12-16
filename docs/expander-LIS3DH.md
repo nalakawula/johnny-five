@@ -31,21 +31,23 @@ node eg/expander-LIS3DH.js
 
 
 ```javascript
-var five = require("johnny-five");
-var board = new five.Board();
+const { Board, Expander, Sensor } = require("johnny-five");
+const board = new Board();
 
-board.on("ready", function() {
-  var virtual = new five.Board.Virtual(
-    new five.Expander("LIS3DH")
+board.on("ready", () => {
+  const virtual = new Board.Virtual(
+    new Expander("LIS3DH")
   );
 
-  var sensor = new five.Sensor({
+  const sensor = new Sensor({
     pin: "A2",
     board: virtual
   });
 
-  sensor.on("data", function() {
-    console.log(sensor.value);
+  sensor.on("change", value => {
+    console.log("Sensor: ");
+    console.log("  value  : ", sensor.value);
+    console.log("-----------------");
   });
 });
 
@@ -65,7 +67,7 @@ board.on("ready", function() {
 ## License
 Copyright (c) 2012-2014 Rick Waldron <waldron.rick@gmail.com>
 Licensed under the MIT license.
-Copyright (c) 2015-2018 The Johnny-Five Contributors
+Copyright (c) 2015-2021 The Johnny-Five Contributors
 Licensed under the MIT license.
 
 <!--remove-end-->

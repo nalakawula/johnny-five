@@ -69,8 +69,8 @@ board.on("ready", function() {
 For this program, you'll need:
 ![Intel Edison Arduino Breakout](https://cdn.sparkfun.com//assets/parts/1/0/1/3/9/13097-06.jpg)
 ![Grove Base Shield v2](http://www.seeedstudio.com/depot/images/product/base%20shield%20V2_01.jpg)
-![Grove - Temperature&Humidity Sensor (High-Accuracy & Mini)](https://github.com/rwaldron/johnny-five/raw/master/docs/breadboard/multi-TH02.png)
-- [Grove - Temperature&Humidity Sensor (High-Accuracy & Mini)](http://www.seeedstudio.com/depot/Grove-TemperatureHumidity-Sensor-HighAccuracy-Mini-p-1921.html)
+![Grove - Thermometer&Humidity Sensor (High-Accuracy & Mini)](https://github.com/rwaldron/johnny-five/raw/master/docs/breadboard/multi-TH02.png)
+- [Grove - Thermometer&Humidity Sensor (High-Accuracy & Mini)](http://www.seeedstudio.com/depot/Grove-ThermometerHumidity-Sensor-HighAccuracy-Mini-p-1921.html)
 
 &nbsp;
 
@@ -79,7 +79,7 @@ For this program, you'll need:
 ## License
 Copyright (c) 2012-2014 Rick Waldron <waldron.rick@gmail.com>
 Licensed under the MIT license.
-Copyright (c) 2015-2018 The Johnny-Five Contributors
+Copyright (c) 2015-2021 The Johnny-Five Contributors
 Licensed under the MIT license.
 
 <!--remove-end-->

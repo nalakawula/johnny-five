@@ -29,16 +29,18 @@ node eg/light-ambient-BH1750.js
 
 
 ```javascript
-var five = require("johnny-five");
-var board = new five.Board();
+const { Board, Light } = require("johnny-five");
+const board = new Board();
 
-board.on("ready", function() {
-  var light = new five.Light({
+board.on("ready", () => {
+  const ambient = new Light({
     controller: "BH1750",
   });
 
-  light.on("data", function() {
-    console.log("Lux: ", this.lux);
+  ambient.on("change", () => {
+    console.log("Ambient Light Level: ");
+    console.log("  level  : ", ambient.level);
+    console.log("-----------------");
   });
 });
 
@@ -69,7 +71,7 @@ Fritzing diagram: [docs/breadboard/light-ambient-BH1750-tessel.fzz](breadboard/l
 ## License
 Copyright (c) 2012-2014 Rick Waldron <waldron.rick@gmail.com>
 Licensed under the MIT license.
-Copyright (c) 2015-2018 The Johnny-Five Contributors
+Copyright (c) 2015-2021 The Johnny-Five Contributors
 Licensed under the MIT license.
 
 <!--remove-end-->

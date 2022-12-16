@@ -1,12 +1,12 @@
 require("./common/bootstrap");
 
-var EVS = require("../lib/evshield");
+const EVS = require("../lib/evshield");
 
-var proto = [{
+const proto = [{
   name: "within"
 }];
 
-var instance = [{
+const instance = [{
   name: "centimeters"
 }, {
   name: "cm"
@@ -17,7 +17,7 @@ var instance = [{
 }];
 
 exports["Proximity"] = {
-  setUp: function(done) {
+  setUp(done) {
     this.sandbox = sinon.sandbox.create();
     this.board = newBoard();
     this.clock = this.sandbox.useFakeTimers();
@@ -32,35 +32,31 @@ exports["Proximity"] = {
     done();
   },
 
-  tearDown: function(done) {
+  tearDown(done) {
     Board.purge();
     this.sandbox.restore();
     done();
   },
 
-  shape: function(test) {
+  shape(test) {
     test.expect(proto.length + instance.length);
 
-    proto.forEach(function(method) {
-      test.equal(typeof this.proximity[method.name], "function");
-    }, this);
-
-    instance.forEach(function(property) {
-      test.notEqual(typeof this.proximity[property.name], 0);
-    }, this);
+    proto.forEach(({name}) => test.equal(typeof this.proximity[name], "function"));
+    instance.forEach(({name}) => test.notEqual(typeof this.proximity[name], 0));
 
     test.done();
   },
 
-  emitter: function(test) {
-    test.expect(1);
+  emitter(test) {
+    test.expect(2);
     test.ok(this.proximity instanceof Emitter);
+    test.ok(this.proximity instanceof EventEmitter);
     test.done();
   }
 };
 
 exports["Proximity: GP2Y0A21YK"] = {
-  setUp: function(done) {
+  setUp(done) {
     this.sandbox = sinon.sandbox.create();
     this.board = newBoard();
     this.clock = this.sandbox.useFakeTimers();
@@ -75,14 +71,14 @@ exports["Proximity: GP2Y0A21YK"] = {
     done();
   },
 
-  tearDown: function(done) {
+  tearDown(done) {
     Board.purge();
     this.sandbox.restore();
     done();
   },
 
-  GP2Y0A21YK: function(test) {
-    var callback = this.analogRead.args[0][1];
+  GP2Y0A21YK(test) {
+    const callback = this.analogRead.args[0][1];
 
     test.expect(4);
 
@@ -97,8 +93,8 @@ exports["Proximity: GP2Y0A21YK"] = {
     test.done();
   },
 
-  data: function(test) {
-    var spy = this.sandbox.spy();
+  data(test) {
+    const spy = this.sandbox.spy();
     test.expect(1);
 
     this.proximity.on("data", spy);
@@ -107,14 +103,14 @@ exports["Proximity: GP2Y0A21YK"] = {
     test.done();
   },
 
-  change: function(test) {
-    var callback = this.analogRead.args[0][1];
+  change(test) {
+    const callback = this.analogRead.args[0][1];
 
     test.expect(1);
 
     callback(250);
 
-    var spy = this.sandbox.spy();
+    const spy = this.sandbox.spy();
 
     this.proximity.on("change", spy);
     this.clock.tick(100);
@@ -122,9 +118,9 @@ exports["Proximity: GP2Y0A21YK"] = {
     test.done();
   },
 
-  within: function(test) {
-    var callback = this.analogRead.args[0][1];
-    var spy = this.sandbox.spy();
+  within(test) {
+    const callback = this.analogRead.args[0][1];
+    const spy = this.sandbox.spy();
     test.expect(2);
 
     callback(500);
@@ -142,7 +138,7 @@ exports["Proximity: GP2Y0A21YK"] = {
 };
 
 exports["Proximity: GP2D120XJ00F"] = {
-  setUp: function(done) {
+  setUp(done) {
     this.sandbox = sinon.sandbox.create();
     this.board = newBoard();
     this.clock = this.sandbox.useFakeTimers();
@@ -157,14 +153,14 @@ exports["Proximity: GP2D120XJ00F"] = {
     done();
   },
 
-  tearDown: function(done) {
+  tearDown(done) {
     Board.purge();
     this.sandbox.restore();
     done();
   },
 
-  GP2D120XJ00F: function(test) {
-    var callback = this.analogRead.args[0][1];
+  GP2D120XJ00F(test) {
+    const callback = this.analogRead.args[0][1];
 
     test.expect(4);
     // 70 is an actual reading at ~14.5"
@@ -178,8 +174,8 @@ exports["Proximity: GP2D120XJ00F"] = {
     test.done();
   },
 
-  data: function(test) {
-    var spy = this.sandbox.spy();
+  data(test) {
+    const spy = this.sandbox.spy();
     test.expect(1);
 
     this.proximity.on("data", spy);
@@ -188,14 +184,14 @@ exports["Proximity: GP2D120XJ00F"] = {
     test.done();
   },
 
-  change: function(test) {
-    var callback = this.analogRead.args[0][1];
+  change(test) {
+    const callback = this.analogRead.args[0][1];
 
     test.expect(1);
 
     callback(250);
 
-    var spy = this.sandbox.spy();
+    const spy = this.sandbox.spy();
 
     this.proximity.on("change", spy);
     this.clock.tick(100);
@@ -203,9 +199,9 @@ exports["Proximity: GP2D120XJ00F"] = {
     test.done();
   },
 
-  within: function(test) {
-    var callback = this.analogRead.args[0][1];
-    var spy = this.sandbox.spy();
+  within(test) {
+    const callback = this.analogRead.args[0][1];
+    const spy = this.sandbox.spy();
     test.expect(2);
 
     callback(100);
@@ -223,7 +219,7 @@ exports["Proximity: GP2D120XJ00F"] = {
 };
 
 exports["Proximity: GP2Y0A02YK0F"] = {
-  setUp: function(done) {
+  setUp(done) {
     this.sandbox = sinon.sandbox.create();
     this.board = newBoard();
     this.clock = this.sandbox.useFakeTimers();
@@ -238,14 +234,14 @@ exports["Proximity: GP2Y0A02YK0F"] = {
     done();
   },
 
-  tearDown: function(done) {
+  tearDown(done) {
     Board.purge();
     this.sandbox.restore();
     done();
   },
 
-  GP2Y0A02YK0F: function(test) {
-    var callback = this.analogRead.args[0][1];
+  GP2Y0A02YK0F(test) {
+    const callback = this.analogRead.args[0][1];
 
     test.expect(4);
 
@@ -259,8 +255,8 @@ exports["Proximity: GP2Y0A02YK0F"] = {
 
     test.done();
   },
-  data: function(test) {
-    var spy = this.sandbox.spy();
+  data(test) {
+    const spy = this.sandbox.spy();
     test.expect(1);
 
     this.proximity.on("data", spy);
@@ -269,14 +265,14 @@ exports["Proximity: GP2Y0A02YK0F"] = {
     test.done();
   },
 
-  change: function(test) {
-    var callback = this.analogRead.args[0][1];
+  change(test) {
+    const callback = this.analogRead.args[0][1];
 
     test.expect(1);
 
     callback(250);
 
-    var spy = this.sandbox.spy();
+    const spy = this.sandbox.spy();
 
     this.proximity.on("change", spy);
     this.clock.tick(100);
@@ -284,9 +280,9 @@ exports["Proximity: GP2Y0A02YK0F"] = {
     test.done();
   },
 
-  within: function(test) {
-    var callback = this.analogRead.args[0][1];
-    var spy = this.sandbox.spy();
+  within(test) {
+    const callback = this.analogRead.args[0][1];
+    const spy = this.sandbox.spy();
     test.expect(2);
 
     callback(500);
@@ -304,7 +300,7 @@ exports["Proximity: GP2Y0A02YK0F"] = {
 };
 
 exports["Proximity: GP2Y0A41SK0F"] = {
-  setUp: function(done) {
+  setUp(done) {
     this.sandbox = sinon.sandbox.create();
     this.board = newBoard();
     this.clock = this.sandbox.useFakeTimers();
@@ -319,14 +315,14 @@ exports["Proximity: GP2Y0A41SK0F"] = {
     done();
   },
 
-  tearDown: function(done) {
+  tearDown(done) {
     Board.purge();
     this.sandbox.restore();
     done();
   },
 
-  GP2Y0A41SK0F: function(test) {
-    var callback = this.analogRead.args[0][1];
+  GP2Y0A41SK0F(test) {
+    const callback = this.analogRead.args[0][1];
 
     test.expect(4);
 
@@ -341,8 +337,8 @@ exports["Proximity: GP2Y0A41SK0F"] = {
     test.done();
   },
 
-  data: function(test) {
-    var spy = this.sandbox.spy();
+  data(test) {
+    const spy = this.sandbox.spy();
     test.expect(1);
 
     this.proximity.on("data", spy);
@@ -351,14 +347,14 @@ exports["Proximity: GP2Y0A41SK0F"] = {
     test.done();
   },
 
-  change: function(test) {
-    var callback = this.analogRead.args[0][1];
+  change(test) {
+    const callback = this.analogRead.args[0][1];
 
     test.expect(1);
 
     callback(250);
 
-    var spy = this.sandbox.spy();
+    const spy = this.sandbox.spy();
 
     this.proximity.on("change", spy);
     this.clock.tick(100);
@@ -366,9 +362,9 @@ exports["Proximity: GP2Y0A41SK0F"] = {
     test.done();
   },
 
-  within: function(test) {
-    var callback = this.analogRead.args[0][1];
-    var spy = this.sandbox.spy();
+  within(test) {
+    const callback = this.analogRead.args[0][1];
+    const spy = this.sandbox.spy();
     test.expect(2);
 
     callback(128);
@@ -386,7 +382,7 @@ exports["Proximity: GP2Y0A41SK0F"] = {
 };
 
 exports["Proximity: GP2Y0A710K0F"] = {
-  setUp: function(done) {
+  setUp(done) {
     this.sandbox = sinon.sandbox.create();
     this.board = newBoard();
     this.clock = this.sandbox.useFakeTimers();
@@ -401,14 +397,14 @@ exports["Proximity: GP2Y0A710K0F"] = {
     done();
   },
 
-  tearDown: function(done) {
+  tearDown(done) {
     Board.purge();
     this.sandbox.restore();
     done();
   },
 
-  GP2Y0A41SK0F: function(test) {
-    var callback = this.analogRead.args[0][1];
+  GP2Y0A41SK0F(test) {
+    const callback = this.analogRead.args[0][1];
 
     test.expect(4);
 
@@ -422,8 +418,8 @@ exports["Proximity: GP2Y0A710K0F"] = {
     test.done();
   },
 
-  data: function(test) {
-    var spy = this.sandbox.spy();
+  data(test) {
+    const spy = this.sandbox.spy();
     test.expect(1);
 
     this.proximity.on("data", spy);
@@ -432,14 +428,14 @@ exports["Proximity: GP2Y0A710K0F"] = {
     test.done();
   },
 
-  change: function(test) {
-    var callback = this.analogRead.args[0][1];
+  change(test) {
+    const callback = this.analogRead.args[0][1];
 
     test.expect(1);
 
     callback(250);
 
-    var spy = this.sandbox.spy();
+    const spy = this.sandbox.spy();
 
     this.proximity.on("change", spy);
     this.clock.tick(100);
@@ -447,9 +443,9 @@ exports["Proximity: GP2Y0A710K0F"] = {
     test.done();
   },
 
-  within: function(test) {
-    var callback = this.analogRead.args[0][1];
-    var spy = this.sandbox.spy();
+  within(test) {
+    const callback = this.analogRead.args[0][1];
+    const spy = this.sandbox.spy();
     test.expect(2);
 
     callback(500);
@@ -467,7 +463,7 @@ exports["Proximity: GP2Y0A710K0F"] = {
 };
 
 exports["Proximity: MB1000"] = {
-  setUp: function(done) {
+  setUp(done) {
     this.sandbox = sinon.sandbox.create();
     this.board = newBoard();
     this.clock = this.sandbox.useFakeTimers();
@@ -482,14 +478,14 @@ exports["Proximity: MB1000"] = {
     done();
   },
 
-  tearDown: function(done) {
+  tearDown(done) {
     Board.purge();
     this.sandbox.restore();
     done();
   },
 
-  MB1000: function(test) {
-    var callback = this.analogRead.args[0][1];
+  MB1000(test) {
+    const callback = this.analogRead.args[0][1];
 
     test.expect(5);
 
@@ -505,8 +501,8 @@ exports["Proximity: MB1000"] = {
     test.done();
   },
 
-  data: function(test) {
-    var spy = this.sandbox.spy();
+  data(test) {
+    const spy = this.sandbox.spy();
     test.expect(1);
 
     this.proximity.on("data", spy);
@@ -515,14 +511,14 @@ exports["Proximity: MB1000"] = {
     test.done();
   },
 
-  change: function(test) {
-    var callback = this.analogRead.args[0][1];
+  change(test) {
+    const callback = this.analogRead.args[0][1];
 
     test.expect(1);
 
     callback(250);
 
-    var spy = this.sandbox.spy();
+    const spy = this.sandbox.spy();
 
     this.proximity.on("change", spy);
     this.clock.tick(100);
@@ -530,9 +526,9 @@ exports["Proximity: MB1000"] = {
     test.done();
   },
 
-  within: function(test) {
-    var callback = this.analogRead.args[0][1];
-    var spy = this.sandbox.spy();
+  within(test) {
+    const callback = this.analogRead.args[0][1];
+    const spy = this.sandbox.spy();
     test.expect(2);
 
     callback(11);
@@ -550,7 +546,7 @@ exports["Proximity: MB1000"] = {
 };
 
 exports["Proximity: MB1010"] = {
-  setUp: function(done) {
+  setUp(done) {
     this.sandbox = sinon.sandbox.create();
     this.board = newBoard();
     this.clock = this.sandbox.useFakeTimers();
@@ -565,14 +561,14 @@ exports["Proximity: MB1010"] = {
     done();
   },
 
-  tearDown: function(done) {
+  tearDown(done) {
     Board.purge();
     this.sandbox.restore();
     done();
   },
 
-  MB1010: function(test) {
-    var callback = this.analogRead.args[0][1];
+  MB1010(test) {
+    const callback = this.analogRead.args[0][1];
 
     test.expect(4);
 
@@ -587,8 +583,8 @@ exports["Proximity: MB1010"] = {
     test.done();
   },
 
-  data: function(test) {
-    var spy = this.sandbox.spy();
+  data(test) {
+    const spy = this.sandbox.spy();
     test.expect(1);
 
     this.proximity.on("data", spy);
@@ -597,14 +593,14 @@ exports["Proximity: MB1010"] = {
     test.done();
   },
 
-  change: function(test) {
-    var callback = this.analogRead.args[0][1];
+  change(test) {
+    const callback = this.analogRead.args[0][1];
 
     test.expect(1);
 
     callback(250);
 
-    var spy = this.sandbox.spy();
+    const spy = this.sandbox.spy();
 
     this.proximity.on("change", spy);
     this.clock.tick(100);
@@ -612,9 +608,9 @@ exports["Proximity: MB1010"] = {
     test.done();
   },
 
-  within: function(test) {
-    var callback = this.analogRead.args[0][1];
-    var spy = this.sandbox.spy();
+  within(test) {
+    const callback = this.analogRead.args[0][1];
+    const spy = this.sandbox.spy();
     test.expect(2);
 
     callback(11);
@@ -632,7 +628,7 @@ exports["Proximity: MB1010"] = {
 };
 
 exports["Proximity: MB1003"] = {
-  setUp: function(done) {
+  setUp(done) {
     this.sandbox = sinon.sandbox.create();
     this.board = newBoard();
     this.clock = this.sandbox.useFakeTimers();
@@ -647,14 +643,14 @@ exports["Proximity: MB1003"] = {
     done();
   },
 
-  tearDown: function(done) {
+  tearDown(done) {
     Board.purge();
     this.sandbox.restore();
     done();
   },
 
-  MB1003: function(test) {
-    var callback = this.analogRead.args[0][1];
+  MB1003(test) {
+    const callback = this.analogRead.args[0][1];
 
     test.expect(5);
 
@@ -670,8 +666,8 @@ exports["Proximity: MB1003"] = {
     test.done();
   },
 
-  data: function(test) {
-    var spy = this.sandbox.spy();
+  data(test) {
+    const spy = this.sandbox.spy();
     test.expect(1);
 
     this.proximity.on("data", spy);
@@ -680,14 +676,14 @@ exports["Proximity: MB1003"] = {
     test.done();
   },
 
-  change: function(test) {
-    var callback = this.analogRead.args[0][1];
+  change(test) {
+    const callback = this.analogRead.args[0][1];
 
     test.expect(1);
 
     callback(250);
 
-    var spy = this.sandbox.spy();
+    const spy = this.sandbox.spy();
 
     this.proximity.on("change", spy);
     this.clock.tick(100);
@@ -695,9 +691,9 @@ exports["Proximity: MB1003"] = {
     test.done();
   },
 
-  within: function(test) {
-    var callback = this.analogRead.args[0][1];
-    var spy = this.sandbox.spy();
+  within(test) {
+    const callback = this.analogRead.args[0][1];
+    const spy = this.sandbox.spy();
     test.expect(2);
 
     callback(30);
@@ -715,7 +711,7 @@ exports["Proximity: MB1003"] = {
 };
 
 exports["Proximity: MB1230"] = {
-  setUp: function(done) {
+  setUp(done) {
     this.sandbox = sinon.sandbox.create();
     this.board = newBoard();
     this.clock = this.sandbox.useFakeTimers();
@@ -730,14 +726,14 @@ exports["Proximity: MB1230"] = {
     done();
   },
 
-  tearDown: function(done) {
+  tearDown(done) {
     Board.purge();
     this.sandbox.restore();
     done();
   },
 
-  MB1230: function(test) {
-    var callback = this.analogRead.args[0][1];
+  MB1230(test) {
+    const callback = this.analogRead.args[0][1];
 
     test.expect(5);
 
@@ -752,8 +748,8 @@ exports["Proximity: MB1230"] = {
     test.done();
   },
 
-  data: function(test) {
-    var spy = this.sandbox.spy();
+  data(test) {
+    const spy = this.sandbox.spy();
     test.expect(1);
 
     this.proximity.on("data", spy);
@@ -762,15 +758,15 @@ exports["Proximity: MB1230"] = {
     test.done();
   },
 
-  change: function(test) {
-    var callback = this.analogRead.args[0][1];
+  change(test) {
+    const callback = this.analogRead.args[0][1];
 
     test.expect(1);
 
     // 250 is an actual reading at ~250cm
     callback(250);
 
-    var spy = this.sandbox.spy();
+    const spy = this.sandbox.spy();
 
     this.proximity.on("change", spy);
     this.clock.tick(100);
@@ -778,9 +774,9 @@ exports["Proximity: MB1230"] = {
     test.done();
   },
 
-  within: function(test) {
-    var callback = this.analogRead.args[0][1];
-    var spy = this.sandbox.spy();
+  within(test) {
+    const callback = this.analogRead.args[0][1];
+    const spy = this.sandbox.spy();
     test.expect(2);
 
     callback(15);
@@ -800,7 +796,7 @@ exports["Proximity: MB1230"] = {
 
 exports["Proximity: SRF10"] = {
 
-  setUp: function(done) {
+  setUp(done) {
     this.sandbox = sinon.sandbox.create();
     this.board = newBoard();
     this.clock = this.sandbox.useFakeTimers();
@@ -816,13 +812,13 @@ exports["Proximity: SRF10"] = {
     done();
   },
 
-  tearDown: function(done) {
+  tearDown(done) {
     Board.purge();
     this.sandbox.restore();
     done();
   },
 
-  fwdOptionsToi2cConfig: function(test) {
+  fwdOptionsToi2cConfig(test) {
     test.expect(3);
 
     this.i2cConfig.reset();
@@ -834,7 +830,7 @@ exports["Proximity: SRF10"] = {
       board: this.board
     });
 
-    var forwarded = this.i2cConfig.lastCall.args[0];
+    const forwarded = this.i2cConfig.lastCall.args[0];
 
     test.equal(this.i2cConfig.callCount, 1);
     test.equal(forwarded.address, 0xff);
@@ -843,21 +839,16 @@ exports["Proximity: SRF10"] = {
     test.done();
   },
 
-  shape: function(test) {
+  shape(test) {
     test.expect(proto.length + instance.length);
 
-    proto.forEach(function(method) {
-      test.equal(typeof this.proximity[method.name], "function");
-    }, this);
-
-    instance.forEach(function(property) {
-      test.notEqual(typeof this.proximity[property.name], 0);
-    }, this);
+    proto.forEach(({name}) => test.equal(typeof this.proximity[name], "function"));
+    instance.forEach(({name}) => test.notEqual(typeof this.proximity[name], 0));
 
     test.done();
   },
 
-  initialize: function(test) {
+  initialize(test) {
     test.expect(4);
 
     test.ok(this.i2cConfig.called);
@@ -873,13 +864,13 @@ exports["Proximity: SRF10"] = {
     test.done();
   },
 
-  data: function(test) {
+  data(test) {
     test.expect(2);
 
     this.clock.tick(100);
 
-    var callback = this.i2cReadOnce.args[0][2],
-      spy = this.sandbox.spy();
+    const callback = this.i2cReadOnce.args[0][2];
+    const spy = this.sandbox.spy();
 
     test.equal(spy.callCount, 0);
 
@@ -894,11 +885,11 @@ exports["Proximity: SRF10"] = {
     test.done();
   },
 
-  change: function(test) {
+  change(test) {
     this.clock.tick(100);
 
-    var callback = this.i2cReadOnce.args[0][2],
-      spy = this.sandbox.spy();
+    const callback = this.i2cReadOnce.args[0][2];
+    const spy = this.sandbox.spy();
 
     test.expect(1);
     this.proximity.on("change", spy);
@@ -915,11 +906,11 @@ exports["Proximity: SRF10"] = {
     test.done();
   },
 
-  within_unit: function(test) {
+  within_unit(test) {
     this.clock.tick(65);
 
-    var callback = this.i2cReadOnce.args[0][2];
-    var called = false;
+    const callback = this.i2cReadOnce.args[0][2];
+    let called = false;
 
     test.expect(1);
 
@@ -937,15 +928,15 @@ exports["Proximity: SRF10"] = {
 };
 
 exports["Proximity: HCSR04"] = {
-  setUp: function(done) {
+  setUp(done) {
     this.sandbox = sinon.sandbox.create();
     this.board = newBoard();
     this.clock = this.sandbox.useFakeTimers();
     this.pulseVal = 1000;
 
-    this.sandbox.stub(MockFirmata.prototype, "pingRead", function(settings, handler) {
+    this.sandbox.stub(MockFirmata.prototype, "pingRead", (settings, handler) => {
       handler(this.pulseVal);
-    }.bind(this));
+    });
 
     this.proximity = new Proximity({
       controller: "HCSR04",
@@ -957,17 +948,17 @@ exports["Proximity: HCSR04"] = {
     done();
   },
 
-  tearDown: function(done) {
+  tearDown(done) {
     Board.purge();
     this.sandbox.restore();
     done();
   },
 
-  acceptAnalogPin: function(test) {
+  acceptAnalogPin(test) {
     test.expect(4);
 
-    var a = this.sandbox.spy();
-    var b = this.sandbox.spy();
+    const a = this.sandbox.spy();
+    const b = this.sandbox.spy();
 
     this.proximity = new Proximity({
       controller: "HCSR04",
@@ -1005,22 +996,17 @@ exports["Proximity: HCSR04"] = {
     test.done();
   },
 
-  shape: function(test) {
+  shape(test) {
     test.expect(proto.length + instance.length);
 
-    proto.forEach(function(method) {
-      test.equal(typeof this.proximity[method.name], "function");
-    }, this);
-
-    instance.forEach(function(property) {
-      test.notEqual(typeof this.proximity[property.name], 0);
-    }, this);
+    proto.forEach(({name}) => test.equal(typeof this.proximity[name], "function"));
+    instance.forEach(({name}) => test.notEqual(typeof this.proximity[name], 0));
 
     test.done();
   },
 
-  data: function(test) {
-    var spy = this.sandbox.spy();
+  data(test) {
+    const spy = this.sandbox.spy();
     test.expect(2);
 
     // tick the clock forward to trigger the pingRead handler
@@ -1034,8 +1020,8 @@ exports["Proximity: HCSR04"] = {
     test.done();
   },
 
-  change: function(test) {
-    var spy = this.sandbox.spy();
+  change(test) {
+    const spy = this.sandbox.spy();
     test.expect(1);
 
     this.pulseVal = 0;
@@ -1052,8 +1038,8 @@ exports["Proximity: HCSR04"] = {
 
   },
 
-  within: function(test) {
-    var spy = this.sandbox.spy();
+  within(test) {
+    const spy = this.sandbox.spy();
     test.expect(2);
 
     // tick the clock forward to trigger the pingRead handler
@@ -1073,14 +1059,14 @@ exports["Proximity: HCSR04"] = {
 };
 
 exports["Proximity: HCSR04I2C"] = {
-  setUp: function(done) {
+  setUp(done) {
     this.sandbox = sinon.sandbox.create();
     this.board = newBoard();
     this.clock = this.sandbox.useFakeTimers();
     this.i2cConfig = this.sandbox.spy(MockFirmata.prototype, "i2cConfig");
-    this.i2cReadOnce = this.sandbox.stub(MockFirmata.prototype, "i2cReadOnce", function(ADDRESS, BYTES_TO_READ, callback) {
+    this.i2cReadOnce = this.sandbox.stub(MockFirmata.prototype, "i2cReadOnce", (ADDRESS, BYTES_TO_READ, callback) => {
       // Use this for 1000 us as duration (HIGH and LOW)
-      var pulseval = 1000;
+      const pulseval = 1000;
       callback([pulseval >> 8, pulseval & 0xFF]);
     });
 
@@ -1092,29 +1078,24 @@ exports["Proximity: HCSR04I2C"] = {
     done();
   },
 
-  tearDown: function(done) {
+  tearDown(done) {
     this.i2cConfig.restore();
     this.i2cReadOnce.restore();
     this.clock.restore();
     done();
   },
 
-  shape: function(test) {
+  shape(test) {
     test.expect(proto.length + instance.length);
 
-    proto.forEach(function(method) {
-      test.equal(typeof this.proximity[method.name], "function");
-    }, this);
-
-    instance.forEach(function(property) {
-      test.notEqual(typeof this.proximity[property.name], 0);
-    }, this);
+    proto.forEach(({name}) => test.equal(typeof this.proximity[name], "function"));
+    instance.forEach(({name}) => test.notEqual(typeof this.proximity[name], 0));
 
     test.done();
   },
 
-  data: function(test) {
-    var spy = this.sandbox.spy();
+  data(test) {
+    const spy = this.sandbox.spy();
     test.expect(2);
 
     this.proximity.on("data", spy);
@@ -1125,10 +1106,10 @@ exports["Proximity: HCSR04I2C"] = {
     test.done();
   },
 
-  change: function(test) {
+  change(test) {
     test.expect(1);
 
-    var spy = this.sandbox.spy();
+    const spy = this.sandbox.spy();
 
     this.proximity.on("change", spy);
 
@@ -1138,8 +1119,8 @@ exports["Proximity: HCSR04I2C"] = {
     test.done();
   },
 
-  within: function(test) {
-    var spy = this.sandbox.spy();
+  within(test) {
+    const spy = this.sandbox.spy();
     test.expect(2);
 
     this.clock.tick(250);
@@ -1156,14 +1137,14 @@ exports["Proximity: HCSR04I2C"] = {
 };
 
 exports["Proximity: LIDARLITE"] = {
-  setUp: function(done) {
+  setUp(done) {
     this.sandbox = sinon.sandbox.create();
     this.board = newBoard();
     this.clock = this.sandbox.useFakeTimers();
     this.i2cConfig = this.sandbox.spy(MockFirmata.prototype, "i2cConfig");
     this.i2cWrite = this.sandbox.spy(MockFirmata.prototype, "i2cWrite");
-    this.i2cReadOnce = this.sandbox.stub(MockFirmata.prototype, "i2cReadOnce", function(ADDRESS, READREGISTER, BYTES_TO_READ, callback) {
-      var cm = 15;
+    this.i2cReadOnce = this.sandbox.stub(MockFirmata.prototype, "i2cReadOnce", (ADDRESS, READREGISTER, BYTES_TO_READ, callback) => {
+      const cm = 15;
 
       // Split to HIGH and LOW
       callback([cm >> 8, cm & 0xff]);
@@ -1178,7 +1159,7 @@ exports["Proximity: LIDARLITE"] = {
     done();
   },
 
-  tearDown: function(done) {
+  tearDown(done) {
     this.i2cConfig.restore();
     this.i2cWrite.restore();
     this.i2cReadOnce.restore();
@@ -1186,22 +1167,17 @@ exports["Proximity: LIDARLITE"] = {
     done();
   },
 
-  shape: function(test) {
+  shape(test) {
     test.expect(proto.length + instance.length);
 
-    proto.forEach(function(method) {
-      test.equal(typeof this.proximity[method.name], "function");
-    }, this);
-
-    instance.forEach(function(property) {
-      test.notEqual(typeof this.proximity[property.name], 0);
-    }, this);
+    proto.forEach(({name}) => test.equal(typeof this.proximity[name], "function"));
+    instance.forEach(({name}) => test.notEqual(typeof this.proximity[name], 0));
 
     test.done();
   },
 
-  data: function(test) {
-    var spy = this.sandbox.spy();
+  data(test) {
+    const spy = this.sandbox.spy();
     test.expect(2);
 
     this.proximity.on("data", spy);
@@ -1213,10 +1189,10 @@ exports["Proximity: LIDARLITE"] = {
     test.done();
   },
 
-  change: function(test) {
+  change(test) {
     test.expect(1);
 
-    var spy = this.sandbox.spy();
+    const spy = this.sandbox.spy();
 
     this.proximity.on("change", spy);
 
@@ -1226,8 +1202,8 @@ exports["Proximity: LIDARLITE"] = {
     test.done();
   },
 
-  within: function(test) {
-    var spy = this.sandbox.spy();
+  within(test) {
+    const spy = this.sandbox.spy();
     test.expect(2);
 
     this.clock.tick(250);
@@ -1244,7 +1220,7 @@ exports["Proximity: LIDARLITE"] = {
 };
 
 exports["Proximity: EVS_EV3_IR"] = {
-  setUp: function(done) {
+  setUp(done) {
     this.sandbox = sinon.sandbox.create();
     this.board = newBoard();
     this.clock = this.sandbox.useFakeTimers();
@@ -1254,7 +1230,7 @@ exports["Proximity: EVS_EV3_IR"] = {
 
     this.i2cConfig = this.sandbox.spy(MockFirmata.prototype, "i2cConfig");
     this.i2cWrite = this.sandbox.spy(MockFirmata.prototype, "i2cWrite");
-    this.i2cRead = this.sandbox.stub(MockFirmata.prototype, "i2cRead", function(address, register, numBytes, callback) {
+    this.i2cRead = this.sandbox.stub(MockFirmata.prototype, "i2cRead", (address, register, numBytes, callback) => {
       callback([15, 0]);
     });
 
@@ -1268,28 +1244,23 @@ exports["Proximity: EVS_EV3_IR"] = {
     done();
   },
 
-  tearDown: function(done) {
+  tearDown(done) {
     Board.purge();
     this.sandbox.restore();
     done();
   },
 
-  shape: function(test) {
+  shape(test) {
     test.expect(proto.length + instance.length);
 
-    proto.forEach(function(method) {
-      test.equal(typeof this.proximity[method.name], "function");
-    }, this);
-
-    instance.forEach(function(property) {
-      test.notEqual(typeof this.proximity[property.name], 0);
-    }, this);
+    proto.forEach(({name}) => test.equal(typeof this.proximity[name], "function"));
+    instance.forEach(({name}) => test.notEqual(typeof this.proximity[name], 0));
 
     test.done();
   },
 
-  data: function(test) {
-    var spy = this.sandbox.spy();
+  data(test) {
+    const spy = this.sandbox.spy();
     test.expect(1);
 
     this.proximity.on("data", spy);
@@ -1298,10 +1269,10 @@ exports["Proximity: EVS_EV3_IR"] = {
     test.done();
   },
 
-  change: function(test) {
+  change(test) {
     test.expect(1);
 
-    var spy = this.sandbox.spy();
+    const spy = this.sandbox.spy();
 
     this.proximity.on("change", spy);
 
@@ -1311,8 +1282,8 @@ exports["Proximity: EVS_EV3_IR"] = {
     test.done();
   },
 
-  within: function(test) {
-    var spy = this.sandbox.spy();
+  within(test) {
+    const spy = this.sandbox.spy();
     test.expect(2);
 
     this.clock.tick(250);
@@ -1329,7 +1300,7 @@ exports["Proximity: EVS_EV3_IR"] = {
 };
 
 exports["Proximity: EVS_EV3_US"] = {
-  setUp: function(done) {
+  setUp(done) {
     this.sandbox = sinon.sandbox.create();
     this.board = newBoard();
     this.clock = this.sandbox.useFakeTimers();
@@ -1339,7 +1310,7 @@ exports["Proximity: EVS_EV3_US"] = {
 
     this.i2cConfig = this.sandbox.spy(MockFirmata.prototype, "i2cConfig");
     this.i2cWrite = this.sandbox.spy(MockFirmata.prototype, "i2cWrite");
-    this.i2cRead = this.sandbox.stub(MockFirmata.prototype, "i2cRead", function(address, register, numBytes, callback) {
+    this.i2cRead = this.sandbox.stub(MockFirmata.prototype, "i2cRead", (address, register, numBytes, callback) => {
       callback([150, 0]);
     });
 
@@ -1353,28 +1324,23 @@ exports["Proximity: EVS_EV3_US"] = {
     done();
   },
 
-  tearDown: function(done) {
+  tearDown(done) {
     Board.purge();
     this.sandbox.restore();
     done();
   },
 
-  shape: function(test) {
+  shape(test) {
     test.expect(proto.length + instance.length);
 
-    proto.forEach(function(method) {
-      test.equal(typeof this.proximity[method.name], "function");
-    }, this);
-
-    instance.forEach(function(property) {
-      test.notEqual(typeof this.proximity[property.name], 0);
-    }, this);
+    proto.forEach(({name}) => test.equal(typeof this.proximity[name], "function"));
+    instance.forEach(({name}) => test.notEqual(typeof this.proximity[name], 0));
 
     test.done();
   },
 
-  data: function(test) {
-    var spy = this.sandbox.spy();
+  data(test) {
+    const spy = this.sandbox.spy();
     test.expect(1);
 
     this.proximity.on("data", spy);
@@ -1383,10 +1349,10 @@ exports["Proximity: EVS_EV3_US"] = {
     test.done();
   },
 
-  change: function(test) {
+  change(test) {
     test.expect(1);
 
-    var spy = this.sandbox.spy();
+    const spy = this.sandbox.spy();
 
     this.proximity.on("change", spy);
 
@@ -1396,8 +1362,8 @@ exports["Proximity: EVS_EV3_US"] = {
     test.done();
   },
 
-  within: function(test) {
-    var spy = this.sandbox.spy();
+  within(test) {
+    const spy = this.sandbox.spy();
     test.expect(2);
 
     this.clock.tick(250);
@@ -1414,7 +1380,7 @@ exports["Proximity: EVS_EV3_US"] = {
 };
 
 exports["Proximity.Collection"] = {
-  setUp: function(done) {
+  setUp(done) {
     this.sandbox = sinon.sandbox.create();
     this.clock = this.sandbox.useFakeTimers();
     this.board = newBoard();
@@ -1451,7 +1417,7 @@ exports["Proximity.Collection"] = {
     done();
   },
 
-  tearDown: function(done) {
+  tearDown(done) {
     Proximity.purge();
     Board.purge();
     this.sandbox.restore();
@@ -1462,7 +1428,7 @@ exports["Proximity.Collection"] = {
     test.expect(7);
 
 
-    var collection = new Proximity.Collection({
+    const collection = new Proximity.Collection({
       pins: [2, 3, 4],
       controller: "HCSR04I2CBACKPACK",
       board: this.board
@@ -1494,7 +1460,7 @@ exports["Proximity.Collection"] = {
   "data: Collection of 3 HCSR04s On One Board": function(test) {
     test.expect(6);
 
-    var collection = new Proximity.Collection({
+    const collection = new Proximity.Collection({
       pins: [2, 3, 4],
       controller: "HCSR04",
       board: this.board
@@ -1524,7 +1490,7 @@ exports["Proximity.Collection"] = {
   "data: Collection of Mixed Proximity Sensors": function(test) {
     test.expect(23);
 
-    var collection = new Proximity.Collection([
+    const collection = new Proximity.Collection([
       { controller: "GP2Y0A710K0F", pin: "A0", board: this.board },
       { controller: "HCSR04I2CBACKPACK", board: this.board },
       { controller: "LIDARLITE", board: this.board },
@@ -1604,11 +1570,11 @@ exports["Proximity.Collection"] = {
     test.done();
   },
 
-  change: function(test) {
+  change(test) {
     test.expect(10);
 
 
-    var collection = new Proximity.Collection({
+    const collection = new Proximity.Collection({
       pins: [2, 3, 4],
       controller: "HCSR04I2CBACKPACK",
       board: this.board
@@ -1645,17 +1611,19 @@ exports["Proximity.Collection"] = {
   },
 };
 
-Object.keys(Proximity.Controllers).forEach(function(name) {
+Object.keys(Proximity.Controllers).forEach(controller => {
 
   // These are duplicates
-  if (name.startsWith("EVS_") || name.includes("MaxSonar") || name.startsWith("LIDAR")) {
+  if (controller.startsWith("EVS_") ||
+      controller.includes("MaxSonar") ||
+      controller.startsWith("LIDAR")) {
     return;
   }
 
-  exports["Proximity - Controller, " + name] = addControllerTest(Proximity, Proximity.Controllers[name], {
-    controller: name,
-    pin: 1
-  });
+  exports[`Proximity - Controller, ${controller}`] = addControllerTest(
+    Proximity, Proximity.Controllers[controller],
+    { controller, pin: 1 }
+  );
 });
 
 // - GP2Y0A21YK

@@ -18,24 +18,22 @@ node eg/motor-EVS_NXT.js
 
 
 ```javascript
-var five = require("johnny-five");
-var board = new five.Board();
+const {Board, Motor} = require("johnny-five");
+const board = new Board();
 
-board.on("ready", function() {
-  var motor = new five.Motor({
+board.on("ready", () => {
+  const motor = new Motor({
     controller: "EVS_NXT",
     pin: "BBM2",
   });
 
-  board.wait(2000, function() {
+  board.wait(2000, () => {
     console.log("REVERSE");
 
     motor.rev();
 
     // Demonstrate motor stop in 2 seconds
-    board.wait(2000, function() {
-      motor.stop();
-    });
+    board.wait(2000, motor.stop);
   });
 
   console.log("FORWARD");
@@ -59,7 +57,7 @@ board.on("ready", function() {
 ## License
 Copyright (c) 2012-2014 Rick Waldron <waldron.rick@gmail.com>
 Licensed under the MIT license.
-Copyright (c) 2015-2018 The Johnny-Five Contributors
+Copyright (c) 2015-2021 The Johnny-Five Contributors
 Licensed under the MIT license.
 
 <!--remove-end-->

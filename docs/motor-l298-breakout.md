@@ -29,13 +29,11 @@ node eg/motor-l298-breakout.js
 
 
 ```javascript
-var five = require("johnny-five"),
-  board = new five.Board();
+const {Board, Motor} = require("johnny-five");
+const board = new Board();
 
-board.on("ready", function() {
-  var motor;
-
-  motor = new five.Motor({
+board.on("ready", () => {
+  const motor = new Motor({
     pins: {
       pwm: 8,
       dir: 9
@@ -43,33 +41,29 @@ board.on("ready", function() {
   });
 
   board.repl.inject({
-    motor: motor
+    motor
   });
 
-  motor.on("start", function() {
-    console.log("start", Date.now());
+  motor.on("start", () => {
+    console.log(`start: ${Date.now()}`);
   });
 
-  motor.on("stop", function() {
-    console.log("automated stop on timer", Date.now());
+  motor.on("stop", () => {
+    console.log(`automated stop on timer: ${Date.now()}`);
   });
 
-  motor.on("forward", function() {
-    console.log("forward", Date.now());
+  motor.on("forward", () => {
+    console.log(`forward: ${Date.now()}`);
 
     // demonstrate switching to reverse after 5 seconds
-    board.wait(5000, function() {
-      motor.reverse(50);
-    });
+    board.wait(5000, () => motor.reverse(50));
   });
 
-  motor.on("reverse", function() {
-    console.log("reverse", Date.now());
+  motor.on("reverse", () => {
+    console.log(`reverse: ${Date.now()}`);
 
     // demonstrate stopping after 5 seconds
-    board.wait(5000, function() {
-      motor.stop();
-    });
+    board.wait(5000, motor.stop);
   });
 
   // set the motor going forward full speed
@@ -92,7 +86,7 @@ board.on("ready", function() {
 ## License
 Copyright (c) 2012-2014 Rick Waldron <waldron.rick@gmail.com>
 Licensed under the MIT license.
-Copyright (c) 2015-2018 The Johnny-Five Contributors
+Copyright (c) 2015-2021 The Johnny-Five Contributors
 Licensed under the MIT license.
 
 <!--remove-end-->

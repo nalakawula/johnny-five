@@ -29,17 +29,17 @@ node eg/board-sampling-interval.js
 
 
 ```javascript
-var five = require("johnny-five");
-var board = new five.Board();
+const { Board } = require("johnny-five");
+const board = new Board();
 
-board.on("ready", function() {
+board.on("ready", () => {
 
   // Use the board's `samplingInterval(ms)` to
   // control the actual MCU sampling rate.
   //
   // This will limit sampling of all Analog Input
   // and I2C sensors to once per second (1000 milliseconds)
-  this.samplingInterval(1000);
+  board.samplingInterval(1000);
 
 
   // Keep in mind that calling this method
@@ -63,7 +63,7 @@ board.on("ready", function() {
 ## License
 Copyright (c) 2012-2014 Rick Waldron <waldron.rick@gmail.com>
 Licensed under the MIT license.
-Copyright (c) 2015-2018 The Johnny-Five Contributors
+Copyright (c) 2015-2021 The Johnny-Five Contributors
 Licensed under the MIT license.
 
 <!--remove-end-->

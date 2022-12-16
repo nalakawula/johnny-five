@@ -18,17 +18,19 @@ node eg/light-ambient-EVS_NXT.js
 
 
 ```javascript
-var five = require("johnny-five");
-var board = new five.Board();
+const { Board, Light } = require("johnny-five");
+const board = new Board();
 
-board.on("ready", function() {
-  var light = new five.Light({
+board.on("ready", () => {
+  const ambient = new Light({
     controller: "EVS_NXT",
     pin: "BAS2"
   });
 
-  light.on("change", function() {
-    console.log("Ambient Light Level: ", this.level);
+  ambient.on("change", () => {
+    console.log("Ambient Light Level: ");
+    console.log("  level  : ", ambient.level);
+    console.log("-----------------");
   });
 });
 
@@ -48,7 +50,7 @@ board.on("ready", function() {
 ## License
 Copyright (c) 2012-2014 Rick Waldron <waldron.rick@gmail.com>
 Licensed under the MIT license.
-Copyright (c) 2015-2018 The Johnny-Five Contributors
+Copyright (c) 2015-2021 The Johnny-Five Contributors
 Licensed under the MIT license.
 
 <!--remove-end-->

@@ -29,20 +29,14 @@ node eg/switch-magnetic-door.js
 
 
 ```javascript
-var five = require("johnny-five");
-var board = new five.Board();
+const {Board, Switch} = require("johnny-five");
+const board = new Board();
 
-board.on("ready", function() {
+board.on("ready", () => {
   // Contact Mode: Normally Open (default!)
-  var sw = new five.Switch(7);
-
-  sw.on("open", function() {
-    console.log("open");
-  });
-
-  sw.on("close", function() {
-    console.log("close");
-  });
+  const sw = new Switch(7);
+  sw.on("open", () => console.log("open"));
+  sw.on("close", () => console.log("close"));
 });
 
 ```
@@ -66,7 +60,7 @@ board.on("ready", function() {
 ## License
 Copyright (c) 2012-2014 Rick Waldron <waldron.rick@gmail.com>
 Licensed under the MIT license.
-Copyright (c) 2015-2018 The Johnny-Five Contributors
+Copyright (c) 2015-2021 The Johnny-Five Contributors
 Licensed under the MIT license.
 
 <!--remove-end-->

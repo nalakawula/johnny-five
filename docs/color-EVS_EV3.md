@@ -18,17 +18,19 @@ node eg/color-EVS_EV3.js
 
 
 ```javascript
-var five = require("johnny-five");
-var board = new five.Board();
+const {Board, Color} = require("johnny-five");
+const board = new Board();
 
-board.on("ready", function() {
-  var color = new five.Color({
+board.on("ready", () => {
+  const color = new Color({
     controller: "EVS_EV3",
     pin: "BAS1"
   });
 
-  color.on("change", function() {
-    console.log("Color: ", this.rgb);
+  color.on("change", () => {
+    console.log("Color:");
+    console.log("  rgb     : ", color.rgb);
+    console.log("--------------------------------------");
   });
 });
 
@@ -49,7 +51,7 @@ board.on("ready", function() {
 ## License
 Copyright (c) 2012-2014 Rick Waldron <waldron.rick@gmail.com>
 Licensed under the MIT license.
-Copyright (c) 2015-2018 The Johnny-Five Contributors
+Copyright (c) 2015-2021 The Johnny-Five Contributors
 Licensed under the MIT license.
 
 <!--remove-end-->

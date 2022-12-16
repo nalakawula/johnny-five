@@ -20,17 +20,17 @@ node eg/grove-light-sensor-edison.js
 
 
 ```javascript
-var five = require("johnny-five");
-var Edison = require("edison-io");
-var board = new five.Board({
+const five = require("johnny-five");
+const Edison = require("edison-io");
+const board = new five.Board({
   io: new Edison()
 });
 
-board.on("ready", function() {
+board.on("ready", () => {
 
   // Plug the Grove TSL2561 Light sensor module
   // into an I2C jack
-  var light = new five.Light({
+  const light = new five.Light({
     controller: "TSL2561"
   });
 
@@ -62,7 +62,7 @@ For this program, you'll need:
 ## License
 Copyright (c) 2012-2014 Rick Waldron <waldron.rick@gmail.com>
 Licensed under the MIT license.
-Copyright (c) 2015-2018 The Johnny-Five Contributors
+Copyright (c) 2015-2021 The Johnny-Five Contributors
 Licensed under the MIT license.
 
 <!--remove-end-->

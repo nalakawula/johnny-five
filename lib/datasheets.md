@@ -1,6 +1,6 @@
 # Datasheets
 
-For all `Controllers`, use the following datasheets for the corresponding product. Page numbers found within the `Controllers[*]` definition are expected to correspond to page numbers found within the appropriate datasheet below. For example, if you're reading through the source of the `BNO055` controller in `imu.js`, you'd use the `BNO055` document linked below. 
+For all `Controllers`, use the following datasheets for the corresponding product. Page numbers found within the `Controllers[*]` definition are expected to correspond to page numbers found within the appropriate datasheet below. For example, if you're reading through the source of the `BNO055` controller in `sip.js`, you'd use the `BNO055` document linked below. 
 
 - [ADS1115](https://cdn-shop.adafruit.com/datasheets/ads1115.pdf)
 - [ADXL335](Datasheet available at https://www.sparkfun.com/datasheets/Components/SMD/adxl335.pdf)
@@ -22,7 +22,7 @@ For all `Controllers`, use the following datasheets for the corresponding produc
 - [HCSR04](https://cdn.sparkfun.com/datasheets/Sensors/Proximity/HCSR04.pdf)
 - [HD44780](https://www.sparkfun.com/datasheets/LCD/HD44780.pdf)
 - [HIH6100](https://sensing.honeywell.com/honeywell-sensing-humidicon-hih6100-series-product-sheet-009059-6-en.pdf)
-- [HIH6130](http://cdn.sparkfun.com/datasheets/Prototyping/1443945.pdf)
+- [HIH6130](https://www.phanderson.com/arduino/I2CCommunications.pdf)
 - [HMC5883L](https://cdn-shop.adafruit.com/datasheets/HMC5883L_3-Axis_Digital_Compass_IC.pdf)
 - [HMC6352](http://www.sparkfun.com/datasheets/Components/HMC6352.pdf)
 - [HRLV-MaxSonar](https://www.maxbotix.com/documents/HRLV-MaxSonar-EZ_Datasheet.pdf)

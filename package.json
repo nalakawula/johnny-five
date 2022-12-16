@@ -1,7 +1,7 @@
 {
   "name": "johnny-five",
   "description": "The JavaScript Robotics and Hardware Programming Framework. Use with: Arduino (all models), Electric Imp, Beagle Bone, Intel Galileo & Edison, Linino One, Pinoccio, pcDuino3, Raspberry Pi, Particle/Spark Core & Photon, Tessel 2, TI Launchpad and more!",
-  "version": "1.0.0",
+  "version": "2.1.0",
   "homepage": "https://johnny-five.io",
   "author": "Rick Waldron <waldron.rick@gmail.com>",
   "keywords": [
@@ -152,7 +152,6 @@
   "dependencies": {
     "chalk": "2.1.0",
     "color-convert": "~1.2.2",
-    "ease-component": "latest",
     "lodash.clonedeep": "^4.3.0",
     "lodash.debounce": "^4.0.3",
     "nanotimer": "0.3.10",
@@ -160,24 +159,24 @@
   },
   "optionalDependencies": {
     "browser-serialport": "latest",
-    "firmata": "^0.19.0",
-    "serialport": "^6.0.4"
+    "firmata": "^2.2.0",
+    "serialport": "^8.0.5"
   },
   "devDependencies": {
     "async": "^2.6.1",
     "common-tags": "^1.8.0",
     "copy-paste": "^1.3.0",
     "coveralls": "^3.0.2",
-    "grunt": "^1.0.3",
-    "grunt-cli": "^1.2.0",
-    "grunt-contrib-jshint": "^1.1.0",
+    "grunt": "^1.4.1",
+    "grunt-cli": "^1.4.3",
+    "grunt-contrib-jshint": "^2.1.0",
     "grunt-contrib-nodeunit": "^2.0.0",
     "grunt-contrib-watch": "^1.1.0",
     "grunt-jsbeautifier": "^0.2.13",
     "grunt-jscs": "^3.0.1",
     "keypress": "latest",
     "mock-firmata": "latest",
-    "nyc": "^12.0.2",
+    "nyc": "^15.0.0",
     "optimist": "^0.6.1",
     "sinon": "~1.10.2"
   },
